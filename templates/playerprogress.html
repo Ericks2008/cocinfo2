@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  {% if PlayerData %}
+    <div class="col-auto">
+      <h1><img height=50px width=50px src="/static/1_{{ PlayerData["townHallLevel"] }}.png" alt="{{ PlayerData["townHallLevel"] }}">
+      {% block title %}{{ PlayerData["name"] }}{% endblock %}</h1>
+    </div>
+    <div class="col-auto">
+      <a href="/player?PlayerTag={{ PlayerData["tag"][1:] }}&DateRange=90"><button type="button" class="btn btn-info">90Days</button></a>
+      <a href="https://www.clashofstats.com/players/{{ PlayerData["tag"][1:] }}/history/log"><button type="button" class="btn btn-info">History Log</button></a>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if PlayerData %}
+    <div class="table">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th><label>Player Progress</label></th>
+            <th><label>spells / troops / heros</label></th>
+            <th><label>level</label></th>
+          </tr>
+          {% for upgradedate in PlayerData['upgradeprogress'].keys() %}
+          {% for item in PlayerData['upgradeprogress'][upgradedate].keys() %}
+          <tr>
+            <td>{{ upgradedate }}</td>
+            <td>{{ item }}</td>
+            <td>{{ PlayerData['upgradeprogress'][upgradedate][item] }}</td>
+          </tr>
+          {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}&#32085;&#22320;&#36870;&#35186;&#23478;&#26063;{% endblock%}</h1>
+{% endblock %}
+
+{% block content %}
+  <h2>Result Date</h2>
+  <h4>Start Date: {{ session['startdate'] }}</h4>
+  <h4>End Date: {{ session['enddate'] }}</h4>
+{% endblock %}

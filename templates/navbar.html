@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand text-primary" href="./clan">ClashOfClan</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Clan</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="./claninfo?ClanTag=8VPLQR2J">&#x7D55;&#x5730;&#x9006;&#x8972;</a></li>
+            <li><a class="dropdown-item" href="./claninfo?ClanTag=YV0CYP29">&#x7D55;&#x5730;&#x9006;&#x8972;&nbsp;2&#x76DF;</a></li>
+            <li><a class="dropdown-item" href="./claninfo?ClanTag=Y2CP999Y">&#x7D55;&#x5730;&#x9006;&#x8972;&nbsp;3&#x76DF;</a></li>
+            <li><a class="dropdown-item" href="./claninfo?ClanTag=LYVC8G9U">&#x7D55;&#x5730;&#x9006;&#x8972;&nbsp;4&#x76DF;</a></li>
+            <li><a class="dropdown-item" href="./claninfo?ClanTag=PCV2PV8C">WIN</a></li>
+            <li><a class="dropdown-item" href="./claninfo?ClanTag=9CLQ9P8R">&#23798;&#23996;&#22825;&#20809;</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if ThisHTML == "clanwarlog" %}active{% endif %}" href="#">ClanWarLog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if ThisHTML == "clanwarleague" %}active{% endif %}" href="#">ClanWarLeague</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if ThisHTML == "player" %}active{% endif %}" href="#">Player</a>
+        </li>
+    </div>
+  </div>
+</nav>

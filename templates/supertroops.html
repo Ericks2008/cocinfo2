@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  {% if activeSuperTroops %}
+    <div class="col-auto">
+      <h1>{% block title %}Active Super Troops{% endblock %}</h1>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if activeSuperTroops %}
+    <div class="table">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th><label>Super Troops</label></th>
+            <th><label>Member</label></th>
+          </tr>
+          {% for troops in activeSuperTroops %}
+          <tr>
+            <td>{{ troops }}</td>
+            <td>
+            {% for member in activeSuperTroops[troops] %}
+            {{ member }}<br/>
+            {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

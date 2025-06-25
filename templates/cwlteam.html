@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<style>
+  .member-level {
+    display: none;
+  }
+  .expand-button::before {
+    content: '+';
+  }
+  .collapse-button::before {
+    content: '-';
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .block {
+    flex: 1 0 400px; /* Adjust the width as needed */
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+</style>
+
+
+<script>
+  function toggleMembers(clanId, levelId) {
+    var members = document.getElementById(clanId + '-' + levelId);
+    var button = document.getElementById(clanId + '-' + levelId + '-button');
+
+    if (members.style.display === 'none') {
+      members.style.display = 'block';
+      button.classList.remove('expand-button');
+      button.classList.add('collapse-button');
+    } else {
+      members.style.display = 'none';
+      button.classList.remove('collapse-button');
+      button.classList.add('expand-button');
+    }
+  }
+</script>
+  {% if ClanWar %}
+  <div class="col-auto">
+    <h1>
+      <img height=50px width=50px src="{{ ClanWar['name']['badgeUrls']['small'] }}" alt=coc>
+      {% block title %}{{ ClanWar['name']['name'] }}{% endblock %}</h1>
+    <h2>{{ ClanWar['season'] }} / {{ ClanWar['state'] }}</h2>
+  </div>
+
+  <ul class="nav nav-tabs fs-6">
+    <li class="nav-item">
+      <a class="nav-link" href="/clanwarleague?ClanTag={{ ClanWar['name']['tag'][1:] }}">League Group</a>
+    </li>
+    {% for round in ClanWar['rounds'] %}
+    <li class="nav-item">
+      <a class="nav-link {% if round['warTags'][0] == '#0' %} disabled {% endif %}" href="/wartag?ClanTag={{ ClanWar['name']['tag'][1:] }}&Season={{ ClanWar['season'] }}&Day={{ loop.index }}">Round {{ loop.index }}</a>
+    </li>
+    {% endfor %}
+    <li class="nav-item">
+        <a class="nav-link active" href="/cwlteam?ClanTag={{ ClanWar['name']['tag'][1:] }}&Season={{ ClanWar['season'] }}">CWL Team</a>
+    </li>
+  </ul>
+  {% endif %}
+
+{% endblock %}
+
+{% block content %}
+  {% if clanlist %}
+    <div class="container">
+    {% for clan_tag in clanlist %}
+      <div class="block">
+      <table class="table">
+      <tbody>
+      <tr><td>{{ clanlist[clan_tag]['name'] }}&nbsp;/&nbsp;{{ clan_tag }}</td>
+          <td>TH</td><td>day 1</td><td>day 2</td><td>day 3</td><td>day 4</td><td>day 5</td><td>day 6</td><td>day 7</td>
+      </tr>
+      {% for membertag in clanlist[clan_tag]['sortedMemberSeq'] %}
+      <tr>
+          <td>{{ clanlist[clan_tag]['memberlist'][membertag]['name'] }}</td>
+          <td>{{ clanlist[clan_tag]['memberlist'][membertag]['townHallLevel'] }}</td>
+          {% if 'attack' in clanlist[clan_tag]['memberlist'][membertag] %}
+          {% for attack_day in clanlist[clan_tag]['memberlist'][membertag]['attack'] %}
+          <td>
+              {% if 'mapPosition' in clanlist[clan_tag]['memberlist'][membertag]['attack'][attack_day] %}
+              {{ clanlist[clan_tag]['memberlist'][membertag]['attack'][attack_day]['mapPosition'] }} : 
+                  {% if 'attacks' in clanlist[clan_tag]['memberlist'][membertag]['attack'][attack_day] %}
+                  {{ clanlist[clan_tag]['memberlist'][membertag]['attack'][attack_day]['attacks'][0]['stars'] }} stars /  
+                  {{ clanlist[clan_tag]['memberlist'][membertag]['attack'][attack_day]['attacks'][0]['destructionPercentage'] }}%
+                  {% endif %}
+              {% endif %}
+          </td>
+          {% endfor %}
+          {% endif %}
+      </tr>
+      {% endfor %}
+      </tbody>
+      </table>
+      </div>
+    {% endfor %}
+    </div>
+
+  {% endif %}
+  {% if clansummary %}
+  <div class='block'>
+      <table class='table'>
+          <tbody>
+              <tr><td>{{ clansummary['name'] }}&nbsp;Summary</td>
+                  <td>Attacks</td>
+                  <td>Stars</td>
+                  <td>%</td>
+                  <td>Avg Stars</td>
+                  <td>Avg %</td>
+              </tr>
+              {% for membertag in clansummary['sortedMemberSeq'] %}
+              <tr>
+                <td>{{ clansummary['memberlist'][membertag]['name'] }}</td>
+                {% if clansummary['memberlist'][membertag]['attackcount'] > 0 %} 
+                <td>{{ clansummary['memberlist'][membertag]['attackcount'] }}</td>
+                <td>{{ clansummary['memberlist'][membertag]['totalstar'] }}</td>
+                <td>{{ clansummary['memberlist'][membertag]['totalpercentage'] }}</td>
+                <td>{{ clansummary['memberlist'][membertag]['averagestar'] }}</td>
+                <td>{{ clansummary['memberlist'][membertag]['averagepercentage'] }}</td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  </div>
+  {% endif %}
+  {# dumpdata|safe #} 
+{% endblock %}

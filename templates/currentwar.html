@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  {% if ClanWar %}
+    <div class="col-auto">
+      <h1><img height=50px width=50px src="{{ ClanWar['clan']['badgeUrls']['small'] }}" alt=coc>
+        {% block title %}{{ ClanWar['clan']['name'] }}{% endblock %}</h1>
+      <p class="h6">teamSize: {% if ClanWar['state'] != 'notInWar' %}{{ ClanWar['teamSize'] }}{% endif %}<br />
+      status: {{ ClanWar['state'] }}<br/>
+      EndTime: {% if ClanWar['state'] != 'notInWar' %}{{ ClanWar['endTime'][6:8] }}/{{ ClanWar['endTime'][4:6] }}/{{ ClanWar['endTime'][:4] }}&nbsp;{{ ClanWar['endTime'][9:11] }}:{{ ClanWar['endTime'][11:13] }} (UTC+0){% endif %}</p>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <style>
+  table {
+    border-collapse: separate;
+    border-spacing:0 10px;
+  }
+  </style>
+  {% if ClanWar %}
+  {% if ClanWar['state'] != 'notInWar' %}
+    <div class="table">
+      <table class="table text-center align-middle">
+        <tbody>
+          <tr {% if ClanWar['clan']['stars'] > ClanWar['opponent']['stars'] %}class="table-success"{% endif %}{% if ClanWar['clan']['stars'] < ClanWar['opponent']['stars'] %}class="table-danger"{% endif %}>
+            <td>
+              {{ ClanWar['clan']['name'] }}<br/>
+              ClanLevel:&nbsp;{{ ClanWar['clan']['clanLevel'] }}<br/>
+              Attacks:&nbsp;{{ ClanWar['clan']['attacks'] }}<br/>
+              Stars:&nbsp;{{ ClanWar['clan']['stars'] }}<br/>
+              Percentage:&nbsp;{{ "%.1f"|format(ClanWar['clan']['destructionPercentage']) }}
+            </td>
+            <td>
+              {{ ClanWar['opponent']['name'] }}<br/>
+              ClanLevel:&nbsp;{{ ClanWar['opponent']['clanLevel'] }}<br/>
+              Attacks:&nbsp;{{ ClanWar['opponent']['attacks'] }}<br/>
+              Stars:&nbsp;{{ ClanWar['opponent']['stars'] }}<br/>
+              Percentage:&nbsp;{{ "%.1f"|format(ClanWar['opponent']['destructionPercentage']) }}            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table text-center align-middle">
+        <tbody>
+          <tr>
+            <th><label>{{ ClanWar['clan']['name'] }}</label></th>
+            <th><label>attack 1</label></th>
+            <th><label>attack 2</label></th>
+            <th><label>{{ ClanWar['opponent']['name'] }}</label></th>
+            <th><label>attack 1</label></th>
+            <th><label>attack 2</label></th>
+          </tr>
+          {% for i in range(1,ClanWar['teamSize']+1) %}
+            <tr>
+              <td>{{ i }}.&nbsp;<img height=30px width=30px src="/static/1_{{ ClanWarTeam['clan'][i]['townhallLevel'] }}.png" alt="{{ ClanWarTeam['clan'][i]['townhallLevel'] }}">{{ ClanWarTeam['clan'][i]['name'] }}</td>
+              <td>{% if ClanWarTeam['clan'][i]['attacks'] %}
+                <p>{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][0]['defenderTag']]['mapPosition'] }}.&nbsp;
+                  <img height=30px width=30px src="/static/1_{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][0]['defenderTag']]['townhallLevel'] }}.png" alt="{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][0]['defenderTag']]['townhallLevel'] }}">
+                  {{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][0]['defenderTag']]['name'] }}<br/>
+                  <small>{% if ClanWarTeam['clan'][i]['attacks'][0]['stars'] > 0 %}
+                  {% for j in range(0, ClanWarTeam['clan'][i]['attacks'][0]['stars']) %}&#x1f31f;{% endfor %}
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['clan'][i]['attacks'][0]['destructionPercentage']) }}%</small></p>
+                {% endif %}</td>
+              <td>{% if ClanWarTeam['clan'][i]['attacks'] %}{% if ClanWarTeam['clan'][i]['attacks']|length > 1 %}
+                <p>{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][1]['defenderTag']]['mapPosition'] }}.&nbsp;
+                  <img height=30px width=30px src="/static/1_{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][1]['defenderTag']]['townhallLevel'] }}.png" alt="{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][1]['defenderTag']]['townhallLevel'] }}">
+                  {{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][1]['defenderTag']]['name'] }}<br/>
+                  <small>{% if ClanWarTeam['clan'][i]['attacks'][1]['stars'] > 0 %}
+                  {% for j in range(0, ClanWarTeam['clan'][i]['attacks'][1]['stars']) %}&#x1f31f;{% endfor %}
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['clan'][i]['attacks'][1]['destructionPercentage']) }}%</small></p>
+                {% endif %} {% endif %}</td>
+              <td>{{ i }}.&nbsp;<img height=30px width=30px src="/static/1_{{ ClanWarTeam['opponent'][i]['townhallLevel'] }}.png" alt="{{ ClanWarTeam['opponent'][i]['townhallLevel'] }}">{{ ClanWarTeam['opponent'][i]['name'] }}</td>
+              <td>{% if ClanWarTeam['opponent'][i]['attacks'] %}
+                <p>{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][0]['defenderTag']]['mapPosition'] }}.&nbsp;
+                  <img height=30px width=30px src="/static/1_{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][0]['defenderTag']]['townhallLevel'] }}.png" alt="{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][0]['defenderTag']]['townhallLevel'] }}">
+                  {{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][0]['defenderTag']]['name'] }}<br/>
+                  <small>{% if ClanWarTeam['opponent'][i]['attacks'][0]['stars'] > 0 %}
+                  {% for j in range(0, ClanWarTeam['opponent'][i]['attacks'][0]['stars'] ) %}&#x1f31f;{% endfor %}
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['opponent'][i]['attacks'][0]['destructionPercentage']) }}%</small></p>
+                {% endif %}</td>
+              <td>{% if ClanWarTeam['opponent'][i]['attacks'] %}{% if ClanWarTeam['opponent'][i]['attacks']|length > 1 %}
+                <p>{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][1]['defenderTag']]['mapPosition'] }}.&nbsp;
+                  <img height=30px width=30px src="/static/1_{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][1]['defenderTag']]['townhallLevel'] }}.png" alt="{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][1]['defenderTag']]['townhallLevel'] }}">
+                  {{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][1]['defenderTag']]['name'] }}<br/>
+                  <small>{% if ClanWarTeam['opponent'][i]['attacks'][1]['stars'] > 0 %}
+                  {% for j in range(0, ClanWarTeam['opponent'][i]['attacks'][1]['stars']) %}&#x1f31f;{% endfor %}
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['opponent'][i]['attacks'][1]['destructionPercentage']) }}%</small></p>
+                {% endif %} {% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <table class="table text-center align-middle">
+        <tbody>
+          <tr>
+            <th><label>{{ ClanWar['clan']['name'] }}</label></th>
+            <th><label>bestOpponentAttack</label></th>
+            <th><label>{{ ClanWar['opponent']['name'] }}</label></th>
+            <th><label>bestOpponentAttack</label></th>
+          </tr>
+          {% for i in range(1,ClanWar['teamSize']+1) %}
+            <tr>
+              <td>{{ i }}.&nbsp;<img height=30px width=30px src="/static/1_{{ ClanWarTeam['clan'][i]['townhallLevel'] }}.png" alt="{{ ClanWarTeam['clan'][i]['townhallLevel'] }}">{{ ClanWarTeam['clan'][i]['name'] }}</td>
+              <td>
+                {% if ClanWarTeam['clan'][i]['bestOpponentAttack'] %}
+                  {{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['bestOpponentAttack']['attackerTag']]['mapPosition'] }}.&nbsp;
+                  <img height=30px width=30px src="/static/1_{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['bestOpponentAttack']['attackerTag']]['townhallLevel'] }}.png" alt="{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['bestOpponentAttack']['attackerTag']]['townhallLevel'] }}">
+                  {{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['bestOpponentAttack']['attackerTag']]['name'] }}<br/>
+                  {% if ClanWarTeam['clan'][i]['bestOpponentAttack']['stars'] > 0 %}
+                    {% for j in range(0, ClanWarTeam['clan'][i]['bestOpponentAttack']['stars']) %}&#x1f31f;{% endfor %}
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['clan'][i]['bestOpponentAttack']['destructionPercentage']) }}%
+                {% endif %}
+              </td>
+              <td>{{ i }}.&nbsp;<img height=30px width=30px src="/static/1_{{ ClanWarTeam['opponent'][i]['townhallLevel'] }}.png" alt="{{ ClanWarTeam['opponent'][i]['townhallLevel'] }}">{{ ClanWarTeam['opponent'][i]['name'] }}</td>
+              <td>
+                {% if ClanWarTeam['opponent'][i]['bestOpponentAttack'] %}
+                  {{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['bestOpponentAttack']['attackerTag']]['mapPosition'] }}.&nbsp;
+                  <img height=30px width=30px src="/static/1_{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['bestOpponentAttack']['attackerTag']]['townhallLevel'] }}.png" alt="{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['bestOpponentAttack']['attackerTag']]['townhallLevel'] }}">
+                  {{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['bestOpponentAttack']['attackerTag']]['name'] }}<br/>
+                  {% if ClanWarTeam['opponent'][i]['bestOpponentAttack']['stars'] > 0 %}
+                    {% for j in range(0, ClanWarTeam['opponent'][i]['bestOpponentAttack']['stars']) %}&#x1f31f;{% endfor %}
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['opponent'][i]['bestOpponentAttack']['destructionPercentage']) }}%
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <table class="table text-center align-middle" id="attacklog">
+        <tbody>
+          <tr>
+            <th><label>{{ ClanWar['clan']['name'] }}</label></th>
+            <th><label>attack 1</label></th>
+            <th><label>attack 2</label></th>
+            <th><label>{{ ClanWar['opponent']['name'] }}</label></th>
+            <th><label>attack 1</label></th>
+            <th><label>attack 2</label></th>
+          </tr>
+          {% for i in range(1,ClanWar['teamSize']+1) %}
+            <tr>
+              <td>{{ i }}.&nbsp;/&nbsp;TH{{ ClanWarTeam['clan'][i]['townhallLevel'] }}&nbsp;/&nbsp;{{ ClanWarTeam['clan'][i]['name'] }}</td>
+              <td>{% if ClanWarTeam['clan'][i]['attacks'] %}
+                <p>{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][0]['defenderTag']]['mapPosition'] }}.&nbsp;/&nbsp;
+                  TH{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][0]['defenderTag']]['townhallLevel'] }}&nbsp;/&nbsp;
+                  {{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][0]['defenderTag']]['name'] }}&nbsp;/&nbsp;
+                  <small>{% if ClanWarTeam['clan'][i]['attacks'][0]['stars'] > 0 %}
+                  {{ ClanWarTeam['clan'][i]['attacks'][0]['stars'] }}&nbsp;Stars
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['clan'][i]['attacks'][0]['destructionPercentage']) }}%</small></p>
+                {% endif %}</td>
+              <td>{% if ClanWarTeam['clan'][i]['attacks'] %}{% if ClanWarTeam['clan'][i]['attacks']|length > 1 %}
+                <p>{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][1]['defenderTag']]['mapPosition'] }}.&nbsp;/&nbsp;
+                  TH{{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][1]['defenderTag']]['townhallLevel'] }}&nbsp;/&nbsp;
+                  {{ ClanWarTeam['player'][ClanWarTeam['clan'][i]['attacks'][1]['defenderTag']]['name'] }}&nbsp;/&nbsp;
+                  <small>{% if ClanWarTeam['clan'][i]['attacks'][1]['stars'] > 0 %}
+                  {{ ClanWarTeam['clan'][i]['attacks'][1]['stars'] }}&nbsp;Stars
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['clan'][i]['attacks'][1]['destructionPercentage']) }}%</small></p>
+                {% endif %} {% endif %}</td>
+              <td>{{ i }}.&nbsp;/&nbsp;TH{{ ClanWarTeam['opponent'][i]['townhallLevel'] }}&nbsp;/&nbsp;{{ ClanWarTeam['opponent'][i]['name'] }}</td>
+              <td>{% if ClanWarTeam['opponent'][i]['attacks'] %}
+                <p>{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][0]['defenderTag']]['mapPosition'] }}.&nbsp;/&nbsp;
+                  TH{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][0]['defenderTag']]['townhallLevel'] }}&nbsp;/&nbsp;
+                  {{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][0]['defenderTag']]['name'] }}&nbsp;/&nbsp;
+                  <small>{% if ClanWarTeam['opponent'][i]['attacks'][0]['stars'] > 0 %}
+                  {{ ClanWarTeam['opponent'][i]['attacks'][0]['stars'] }}&nbsp;Stars
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['opponent'][i]['attacks'][0]['destructionPercentage']) }}%</small></p>
+                {% endif %}</td>
+              <td>{% if ClanWarTeam['opponent'][i]['attacks'] %}{% if ClanWarTeam['opponent'][i]['attacks']|length > 1 %}
+                <p>{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][1]['defenderTag']]['mapPosition'] }}.&nbsp;/&nbsp;
+                  TH{{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][1]['defenderTag']]['townhallLevel'] }}&nbsp;/&nbsp;
+                  {{ ClanWarTeam['player'][ClanWarTeam['opponent'][i]['attacks'][1]['defenderTag']]['name'] }}&nbsp;/&nbsp;
+                  <small>{% if ClanWarTeam['opponent'][i]['attacks'][1]['stars'] > 0 %}
+                  {{ ClanWarTeam['opponent'][i]['attacks'][1]['stars'] }}&nbsp;Stars
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['opponent'][i]['attacks'][1]['destructionPercentage']) }}%</small></p>
+                {% endif %} {% endif %}</td>
+            </tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <table class="table text-center align-middle", id='seq'>
+        <tbody>
+          <tr>
+            <th><label>Sequence</label></th>  
+            <th><label>{{ ClanWar['clan']['name'] }}</label></th>
+            <th><label>attack</label></th>
+            <th><label>{{ ClanWar['opponent']['name'] }}</label></th>
+            <th><label>attack</label></th>
+          </tr>
+          {% for i in ClanWarTeam['orderSeq'] %}
+            <tr>
+              <td> {{ i }} </td>  
+              {% if ClanWarTeam['order'][i]['team'] == 'clan'  %}
+              <td>{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['attackerTag']]['mapPosition']}}.&nbsp;
+                  <img height=30px width=30px src="/static/1_{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['attackerTag']]['townhallLevel'] }}.png"
+                  alt="{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['attackerTag']]['townhallLevel'] }}">
+                  {{ ClanWarTeam['player'][ClanWarTeam['order'][i]['attackerTag']]['name'] }}</td>
+              <td>
+                <p>{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['defenderTag']]['mapPosition'] }}.&nbsp;
+                  <img height=30px width=30px src="/static/1_{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['defenderTag']]['townhallLevel'] }}.png"
+                  alt="{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['defenderTag']]['townhallLevel'] }}">
+                  {{ ClanWarTeam['player'][ClanWarTeam['order'][i]['defenderTag']]['name'] }}<br/>
+                  <small>{% if ClanWarTeam['order'][i]['stars'] > 0 %}
+                  {% for j in range(0, ClanWarTeam['order'][i]['stars']) %}&#x1f31f;{% endfor %}
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['order'][i]['destructionPercentage']) }}%</small></p>
+                </td>
+              {% else %}
+              <td></td><td></td>
+              {% endif %}
+              {% if ClanWarTeam['order'][i]['team'] == 'opponent'  %}
+              <td>{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['attackerTag']]['mapPosition']}}.&nbsp;
+                  <img height=30px width=30px src="/static/1_{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['attackerTag']]['townhallLevel'] }}.png"
+                  alt="{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['attackerTag']]['townhallLevel'] }}">i
+                  {{ ClanWarTeam['player'][ClanWarTeam['order'][i]['attackerTag']]['name'] }}</td>
+              <td>
+                <p>{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['defenderTag']]['mapPosition'] }}.&nbsp;
+                  <img height=30px width=30px src="/static/1_{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['defenderTag']]['townhallLevel'] }}.png" 
+                  alt="{{ ClanWarTeam['player'][ClanWarTeam['order'][i]['defenderTag']]['townhallLevel'] }}">
+                  {{ ClanWarTeam['player'][ClanWarTeam['order'][i]['defenderTag']]['name'] }}<br/>
+                  <small>{% if ClanWarTeam['order'][i]['stars'] > 0 %}
+                  {% for j in range(0, ClanWarTeam['order'][i]['stars']) %}&#x1f31f;{% endfor %}
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarTeam['order'][i]['destructionPercentage']) }}%</small></p>
+                </td>
+              {% else %}
+              <td></td><td></td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+ 
+
+
+
+    </div>
+  {% endif %} {% endif %}
+  {# dumpdata|safe #}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}&#32085;&#22320;&#36870;&#35186;&#23478;&#26063;{% endblock%}</h1>
+{% endblock %}
+
+{% block content %}
+  <h3>Select a date range</h3>
+  <form action="" method='POST' name="myform">
+    {{ form.cstr_token }}
+    {{ form.startdate.label }}{{ form.startdate(class='datepicker') }}{{ form.hidden_tag() }}
+    {{ form.enddate.label }}{{ form.enddate(class='datepicker') }}{{ form.hidden_tag() }}
+    <p>
+    {{ form.submit() }}
+    </p>
+  </form>
+
+
+
+
+{% endblock %}

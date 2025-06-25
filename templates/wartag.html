@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<style>
+  .member-level {
+    display: none;
+  }
+  .expand-button::before {
+    content: '+';
+  }
+  .collapse-button::before {
+    content: '-';
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .block {
+    flex: 1 0 600px; /* Adjust the width as needed */
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+</style>
+
+
+<script>
+  function toggleMembers(clanId, levelId) {
+    var members = document.getElementById(clanId + '-' + levelId);
+    var button = document.getElementById(clanId + '-' + levelId + '-button');
+
+    if (members.style.display === 'none') {
+      members.style.display = 'block';
+      button.classList.remove('expand-button');
+      button.classList.add('collapse-button');
+    } else {
+      members.style.display = 'none';
+      button.classList.remove('collapse-button');
+      button.classList.add('expand-button');
+    }
+  }
+</script>
+  {% if ClanWar %}
+  <div class="col-auto">
+    <h1>
+      <img height=50px width=50px src="{{ ClanWar['name']['badgeUrls']['small'] }}" alt=coc>
+      {% block title %}{{ ClanWar['name']['name'] }}{% endblock %}</h1>
+    <h2>{{ ClanWar['season'] }} / {{ ClanWar['state'] }}</h2>
+  </div>
+  {% endif %}
+
+  <ul class="nav nav-tabs fs-6">
+    <li class="nav-item">
+      <a class="nav-link" href="/clanwarleague?ClanTag={{ ClanWar['name']['tag'][1:] }}">League Group</a>
+    </li>
+    {% for round in ClanWar['rounds'] %}
+    <li class="nav-item">
+      <a class="nav-link {% if round['warTags'][0] == '#0' %} disabled {% endif %} {% if loop.index0 == RoundDay %} active {% endif %}" href="/wartag?ClanTag={{ ClanWar['name']['tag'][1:] }}&Season={{ ClanWar['season'] }}&Day={{ loop.index }}">Round {{ loop.index }}</a>
+    </li>
+    {% endfor %}
+    <li class="nav-item">
+        <a class="nav-link" href="/cwlteam?ClanTag={{ ClanWar['name']['tag'][1:] }}&Season={{ ClanWar['season'] }}">CWL Team</a>
+    </li>
+  </ul>
+
+{% endblock %}
+
+{% block content %}
+  {% if ClanWar %}
+    <div class="container">
+    {% for wartag in ClanWar['rounds'][RoundDay]['warTags'] %}
+      <div class="block">
+      <table class="table">
+      <tbody>
+      <tr><td>{% if ClanWar['rounds'][RoundDay][wartag]['state'] != 'warEnded' %}State : {{ ClanWar['rounds'][RoundDay][wartag]['state'] }}{% endif %}</td></tr>
+      <tr><td class="{% if ClanWar['rounds'][RoundDay][wartag]['state'] == 'warEnded' %}{% if ClanWar['rounds'][RoundDay][wartag]['result'] == 'win' %}table-success{% else %}table-danger{% endif %}{% endif %}" >
+        {{ ClanWar['rounds'][RoundDay][wartag]['clan']['name'] }}<br/>
+        {% if ClanWar['rounds'][RoundDay][wartag]['clan']['attacks'] %}
+        attacks : {{ ClanWar['rounds'][RoundDay][wartag]['clan']['attacks'] }}<br/>
+        stars : {{ ClanWar['rounds'][RoundDay][wartag]['clan']['stars'] }}<br/>
+        Percentage : {{ "%.1f"|format(ClanWar['rounds'][RoundDay][wartag]['clan']['destructionPercentage']) }}%
+        {% endif %}</td>
+        <td class="text-center">vs</td><td class="{% if ClanWar['rounds'][RoundDay][wartag]['state'] == 'warEnded' %}{% if ClanWar['rounds'][RoundDay][wartag]['result'] != 'win' %}table-success{% else %}table-danger{% endif %}{% endif %}" >
+          {{ ClanWar['rounds'][RoundDay][wartag]['opponent']['name'] }}<br/>
+          {% if ClanWar['rounds'][RoundDay][wartag]['opponent']['attacks'] %}
+          attacks : {{ ClanWar['rounds'][RoundDay][wartag]['opponent']['attacks'] }}<br/>
+          stars : {{ ClanWar['rounds'][RoundDay][wartag]['opponent']['stars'] }}<br/>
+          Percentage : {{ "%.1f"|format(ClanWar['rounds'][RoundDay][wartag]['opponent']['destructionPercentage']) }}%
+        {% endif %}</td><td></td></tr>
+      {% for member in ClanWar['rounds'][RoundDay][wartag]['clan']['members']  %}
+        <tr><td>{{ member['mapPosition'] }}.&nbsp;<img height=30px width=30px src="/static/1_{{ member['townhallLevel'] }}.png" alt="{{ member['townhallLevel'] }}">{{ member['name'] }}</td>
+        <td>{% if member['attacks'] %}
+          <img height=30px width=30px src="/static/1_{{ totalMemberList[member['attacks'][0]['defenderTag']]['townhallLevel'] }}.png"
+            alt="{{ totalMemberList[member['attacks'][0]['defenderTag']]['townhallLevel'] }}">
+          {{ totalMemberList[member['attacks'][0]['defenderTag']]['name'] }}<br/><small>
+          {% for j in range(0, member['attacks'][0]['stars']) %}&#x1f31f;{% endfor %}
+          &nbsp;/&nbsp;{{ "%.1f"|format(member['attacks'][0]['destructionPercentage']) }}%</small>
+          {% endif %}</td>
+        <td>{{ ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['mapPosition'] }}.&nbsp;
+          <img height=30px width=30px src="/static/1_{{ ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['townhallLevel'] }}.png"
+          alt="{{ ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['townhallLevel'] }}">
+          {{ ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['name'] }}</td>
+        <td>{% if ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'] %}
+          <img height=30px width=30px src="/static/1_{{ totalMemberList[ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'][0]['defenderTag']]['townhallLevel'] }}.png"
+          alt="{{ totalMemberList[ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'][0]['defenderTag']]['townhallLevel'] }}">
+          {{ totalMemberList[ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'][0]['defenderTag']]['name'] }}<br/><small>
+          {% for j in range(0, ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'][0]['stars']) %}&#x1f31f;{% endfor %}
+          &nbsp;/&nbsp;{{ "%.1f"|format(ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'][0]['destructionPercentage']) }}%</small>
+          {% endif %}</td></tr>
+      {% endfor %}
+      </tbody>
+      </table>
+      </div>
+    {% endfor %}
+    </div>
+
+  {% endif %}
+
+{% endblock %}

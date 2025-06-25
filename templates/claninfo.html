@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  {% if ClanData %}
+    <div class="col-auto">
+      <h1><img src="{{ ClanData['badgeUrls']['small'] }}" alt=coc>{% block title %}{{ ClanData["name"] }}{% endblock %}</h1>
+    </div>
+    <form action="/clanprogress" method="post" id="myForm">
+      <input type="hidden" name="ClanTag" value="{{ ClanData["tag"][1:] }}" />
+    </form>
+    <div class="col-auto">
+      <a href="/currentwar?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">CurrentWar</button></a>
+      {% if ClanData['isWarLogPublic'] %}
+      <a href="/clanwarlog?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">ClanWarLog</button></a>
+      {% endif %}
+      <button type="submit" form="myForm" class="btn btn-info" name="clanprogress">ClanProgress</button>
+      <a href="/supertroops?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">SuperTroops</button></a>
+      <a href="/clanwarleague?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">Clan War League (local)</button></a>
+      <a href="/clantroops?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">Troops</button></a>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if ClanData %}
+    <div class="table">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th><label>League</label></th>
+            <th></th>
+            <th><label>Member</label></th>
+            <th><label>Role / warPref</label></th>
+            <th><label>Donated</label></th>
+            <th><label>Received</label></th>
+            <th><label>AttackWins</label></th>
+            <th><label>past 6 month</label></th>
+          </tr>
+          {% for Member in ClanData["memberList"] %}
+            <tr>
+              <td><img src="{{ Member["league"]["iconUrls"]["tiny"] }}" alt="coc"></td>
+              <td><img height=40px width=40px src="/static/1_{{ Member['townHallLevel'] }}.png" alt="{{ Member['townHallLevel'] }}"></td>
+              <td>
+                <a href="/player?PlayerTag={{ Member["tag"][1:] }}">
+                {{ Member["name"] }}</br><div class="initialism">{{ Member["tag"] }}</div></a></td>
+              <td class="{% if Member["warPreference"] == "in" %}table-success{% else %}table-danger{% endif %}">{% if Member["role"] == "admin" %}Elder{% else %}{{ Member["role"] }}{% endif %}</td>
+              <td>{{ Member["donations"] }}</td>
+              <td>{{ Member["donationsReceived"] }}</td>
+              <td>{{ Member['attackWins'] }}</td>
+              <td><a href="https://clashspot.net/en/player/{{ Member["tag"][1:] }}/war-statistics/home-village?type=cwl&month=6"><button type="button" class="btn btn-info">CWL</button></a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

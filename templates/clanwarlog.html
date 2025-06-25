@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  {% if ClanWarLog %}
+    <div class="col-auto">
+      <h1>
+        <img height=50px width=50px src="{{ ClanWarLog["items"][0]['clan']['badgeUrls']['small'] }}" alt=coc>
+        {% block title %}{{ ClanWarLog["items"][0]['clan']['name'] }}{% endblock %}</h1>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <style>
+  table {
+    border-collapse: separate;
+    border-spacing:0 10px;
+  }
+  </style>
+  {% if ClanWarLog %}
+    <div class="table">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th><label>endTime(UTC+0)</label></th>
+            <th><label>teamSize</label></th>
+            <th><label>ourResult</label></th>
+            <th><label>opponent</label></th>
+            <th><label>theirResult</label></th>
+          </tr>
+          {% for ClanWar in ClanWarLog['print'] %}
+          {% if ClanWar['opponent']['name'] %}
+            <tr class="{% if ClanWar['result'] == 'win' %}table-success{% endif %}{% if ClanWar['result'] == "lose" %}table-danger{% endif %}">
+              <td><a href="/wardetail?ClanTag={{ ClanWarLog['items'][0]['clan']['tag'][1:] }}&Date={{ ClanWar['endTime'][:8] }}">
+                {{ ClanWar['endTime'][6:8] }}/{{ ClanWar['endTime'][4:6] }}/{{ ClanWar['endTime'][:4] }}&nbsp;
+                {{ ClanWar['endTime'][9:11] }}:{{ ClanWar['endTime'][11:13] }}</a></td>
+              <td>{{ ClanWar['teamSize'] }}</td>
+              <td>{{ ClanWar['clan']['stars'] }}&#x1f31f;&nbsp;/&nbsp;{{ "%.2f"|format(ClanWar['clan']['destructionPercentage']) }}%</td>
+              <td><img height=25px width=25px src="{{ ClanWar['opponent']['badgeUrls']['small'] }}" alt="coc">{{ ClanWar['opponent']['name'] }}</td>
+              <td>{{ ClanWar['opponent']['stars'] }}&#x1f31f;&nbsp;/&nbsp;{{ "%.2f"|format(ClanWar['opponent']['destructionPercentage']) }}%
+            </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="table">
+      <table class="table text-center align-middle">
+        <tbody>
+          <tr>
+            <th><label>UTC Time</label></th>
+            {% for ClanWar in ClanWarLog['print'] %}
+            <th>{{ ClanWar['endTime'][6:8] }}/{{ ClanWar['endTime'][4:6] }}/{{ ClanWar['endTime'][:4] }}</br>
+                {{ ClanWar['endTime'][9:11] }}:{{ ClanWar['endTime'][11:13] }}</th>
+            <th>{{ ClanWarLog['warlog'][ClanWar['endTime'][:8]]['state'] }}</th> 
+            {% endfor %}
+          </tr>
+          <tr>
+            <th><label>Member</label></th>
+            {% for ClanWar in ClanWarLog['print'] %}
+            <th>attack 1</th>
+            <th>attack 2</th>
+            {% endfor %}
+          </tr>
+          {% for membertag in ClanWarLog['mapPositionSeq'].values() %}
+          <tr>
+            <td>{{ "%.1f"|format(ClanWarLog['clan'][membertag]['mapPositionAvg']) }}</br>
+            <img height=30px width=30px src="/static/1_{{ ClanWarLog['clan'][membertag]['townhallLevel'] }}.png"
+            alt="{{ ClanWarLog['clan'][membertag]['townhallLevel'] }}">{{ ClanWarLog['clan'][membertag]['name'] }}
+            </td>
+            {% for ClanWar in ClanWarLog['print'] %}
+              {% for i in ['1', '2'] %}
+              {% if ClanWar['endTime'][:8] + '-' + i in ClanWarLog['clan'][membertag] %}
+                {% if 'defenderTag' in ClanWarLog['clan'][membertag][ClanWar['endTime'][:8] + '-' + i] %}
+
+                  <td>
+                  <p>{{ ClanWarLog['player'][ClanWarLog['clan'][membertag][ClanWar['endTime'][:8] + '-' + i]['defenderTag']]['mapPosition'] }}.&nbsp;
+                  <img height=30px width=30px 
+                  src="/static/1_{{ ClanWarLog['player'][ClanWarLog['clan'][membertag][ClanWar['endTime'][:8] + '-' + i]['defenderTag']]['townhallLevel'] }}.png" 
+                  alt="{{ ClanWarLog['player'][ClanWarLog['clan'][membertag][ClanWar['endTime'][:8] + '-' + i]['defenderTag']]['townhallLevel'] }}">
+                  {# ClanWarLog['player'][ClanWarLog['clan'][membertag][ClanWar['endTime'][:8] + '-' + i]['defenderTag']]['name'] #}<br/>
+                  <small>{% if ClanWarLog['clan'][membertag][ClanWar['endTime'][:8] + '-1']['stars'] > 0 %}
+                  {% for j in range(0, ClanWarLog['clan'][membertag][ClanWar['endTime'][:8] + '-' + i]['stars']) %}&#x1f31f;{% endfor %}
+                  {% endif %}
+                  &nbsp;/&nbsp;{{ "%.1f"|format(ClanWarLog['clan'][membertag][ClanWar['endTime'][:8] + '-' + i]['destructionPercentage']) }}%</small></p>
+                  </td>
+
+                {% else %}
+                  <td>/</td>
+                {% endif %}
+              {% else %}
+                <td></td>
+              {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+  {# dumpdata|safe #}
+{% endblock %}

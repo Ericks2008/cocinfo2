@@ -1,8 +1,6 @@
 
 #ClanTagList = ['8VPLQR2J', 'YV0CYP29', 'Y2CP999Y', 'LYVC8G9U', 'PCV2PV8C', 'LU2VVLCQ']
-#ClanTagList = ['8VPLQR2J', 'YV0CYP29', 'Y2CP999Y', 'LYVC8G9U', 'PCV2PV8C']
 ClanTagList = ['8VPLQR2J', 'YV0CYP29', 'Y2CP999Y', 'LYVC8G9U', 'PCV2PV8C', '9CLQ9P8R']
-
 
 heroeslist = ['Barbarian King', 'Archer Queen', 'Grand Warden', 'Royal Champion', 'Minion Prince']
 troopsdetail = {

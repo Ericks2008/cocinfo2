@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  {% if ClanData %}
+    <div class="col-auto">
+      <h1><a href="/claninfo?ClanTag={{ ClanData["tag"][1:] }}"><img src="{{ ClanData['badgeUrls']['small'] }}" alt=coc>{% block title %}{{ ClanData["name"] }}{% endblock %}</a></h1>
+    </div>
+    <form action="/clanprogress" method="post" id="myForm">
+      <input type="hidden" name="ClanTag" value="{{ ClanData["tag"][1:] }}" />
+    </form>
+    <div class="col-auto">
+      <a href="/currentwar?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">CurrentWar</button></a>
+      {% if ClanData['isWarLogPublic'] %}
+      <a href="/clanwarlog?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">ClanWarLog</button></a>
+      {% endif %}
+      <button type="submit" form="myForm" class="btn btn-info" name="clanprogress">ClanProgress</button>
+      <a href="/supertroops?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">SuperTroops</button></a>
+      <a href="/clanwarleague?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">Clan War League (local)</button></a>
+      <a href="/clantroops?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">Troops</button></a>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if ClanData %}
+    <div class="table-container">
+      <table class="header-table-troops">
+        <thead>
+          <tr>
+          <th class="td-item"><label>TH</label></th>
+          <th class="td-membername" style ="z-index : 9999;"><label>Member</label></th>
+          {% for item in heroeslist %}
+          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th><th class="td-item"></th><th class="td-item"></th>
+          {% endfor %}
+          {% for item in heroequipmentslist %}
+          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
+          {% endfor %}
+          {% for item in petslist %}
+          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
+          {% endfor %}
+          {% for item in siegemachinelist %}
+          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
+          {% endfor %}
+          {% for item in troopslist %}
+          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
+          {% endfor %}
+          {% for item in darktroopslist %}
+          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
+          {% endfor %}
+          {% for item in spellslist %}
+          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
+          {% endfor %}
+          </tr>
+        </thead>
+      </table>
+      <table class="table-troops">
+        <tbody>
+          {% for Member in ClanData["memberList"] %}
+            <tr>
+              <th class="td-item"><img height=30px width=30px src="/static/1_{{ Member['townHallLevel'] }}.png" alt="{{ Member['townHallLevel'] }}"></th>
+              <th class="td-membername"><a href="/player?PlayerTag={{ Member["tag"][1:] }}">{{ Member["name"] }}</a></th>
+              {% for item in heroeslist %}
+                {% if Member['detail']['heroeslist'][item] is defined %}
+                <td class="td-item"><span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['heroeslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['heroeslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">{{ Member['detail']['heroeslist'][item]['level'] }}</span></td>
+                  {% if Member['detail']['heroeslist'][item]['equipment'] is defined %}
+                    {% for equipment in Member['detail']['heroeslist'][item]['equipment'] %}
+                    <td class="td-item"><img height=30px width=30px src="/static/{{ icon[equipment['name']] }}" alt="{{ equipment['name'] }}"></td>
+                    {% endfor %}
+                  {% else %}
+                    <td class="td-item">&nbsp;</td><td class="td-item">&nbsp;</td>
+                  {% endif %}
+                {% else %}
+                  <td class="td-item">&nbsp;</td><td class="td-item">&nbsp;</td><td class="td-item">&nbsp;</td>
+                {% endif %}
+              {% endfor %}
+              {% for item in heroequipmentslist %}
+                <td class="td-item">{% if Member['detail']['heroEquipmentlist'] is defined %}
+                  {% if Member['detail']['heroEquipmentlist'][item] is defined %}
+                  <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['heroEquipmentlist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['heroEquipmentlist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
+                  {{ Member['detail']['heroEquipmentlist'][item]['level'] }}
+                  </span>
+                  {% endif %}
+                  {% endif %}</td>
+              {% endfor %}
+              {% for item in petslist %}
+              <td class="td-item">{% if Member['detail']['troopslist'][item] is defined %}
+                <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['troopslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['troopslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
+                {{ Member['detail']['troopslist'][item]['level'] }}
+                </span>
+                {% endif %}</td>
+              {% endfor %}
+              {% for item in siegemachinelist %}
+              <td class="td-item">{% if Member['detail']['troopslist'][item] is defined %}
+                <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['troopslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['troopslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
+                {{ Member['detail']['troopslist'][item]['level'] }}
+                </span>
+                {% endif %}</td>
+              {% endfor %}
+              {% for item in troopslist %}
+              <td class="td-item">{% if Member['detail']['troopslist'][item] is defined %}
+                <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['troopslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['troopslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
+                {{ Member['detail']['troopslist'][item]['level'] }}
+                </span>
+                {% endif %}</td>
+              {% endfor %}
+              {% for item in darktroopslist %}
+              <td class="td-item">{% if Member['detail']['troopslist'][item] is defined %}
+                <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['troopslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['troopslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
+                {{ Member['detail']['troopslist'][item]['level'] }}
+                </span>
+                {% endif %}</td>
+              {% endfor %}
+              {% for item in spellslist %}
+              <td class="td-item">{% if Member['detail']['spellslist'][item] is defined %}
+                <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['spellslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['spellslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
+                {{ Member['detail']['spellslist'][item]['level'] }}
+                </span>
+                {% endif %}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

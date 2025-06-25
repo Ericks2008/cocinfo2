@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  {% if PlayerData %}
+    <div class="col-auto">
+      <h1><img height=50px width=50px src="/static/1_{{ PlayerData["townHallLevel"] }}.png" alt="{{ PlayerData["townHallLevel"] }}">
+      {% block title %}{{ PlayerData["name"] }}{% endblock %}</h1>
+    </div>
+    <div class="col-auto">
+      <a href="/player?PlayerTag={{ PlayerData["tag"][1:] }}&DateRange=90"><button type="button" class="btn btn-info">90Days</button></a>
+      <a href="/playerprogress?PlayerTag={{ PlayerData["tag"][1:] }}"><button type="button" class="btn btn-info">Upgrade Progress</button></a>
+      <a href="https://www.clashofstats.com/players/{{ PlayerData["tag"][1:] }}/history/log"><button type="button" class="btn btn-info">History Log</button></a>
+    </div>
+    <div class="col-auto form-group">
+      <form action="" method='POST' name="myform">
+        {{ form.cstr_token }}
+        {{ form.submit(class="btn btn-info") }}{{ form.playerdate(class='datepicker form-control') }}{{ form.hidden_tag() }}
+      </form>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if PlayerData %}
+  <div class="table-container">
+    <table class="header-table-troops">
+      <thead>
+          <tr>
+            <th class="td-progressname"><label>Player Progress</label></th>
+            {% for historyDate in PlayerData['playerprogress']['history'] %}
+            <th class="td-playerprogress"><label>{{ historyDate[5:] }}</label></th>
+            {% endfor %}
+          </tr>
+      </thead>
+    </table>
+    <table class="table-troops">
+      <tbody>
+          {% for metric in PlayerMetric %}
+          <tr>
+            <th class="td-progressname">{{ metric }}</th>
+            {% for historyDate in PlayerData['playerprogress']['history'] %}
+            <td class="td-playerprogress">{% if metric in PlayerData['playerprogress'][historyDate] %}
+            {{ PlayerData['playerprogress'][historyDate][metric] }}{% endif %}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+          {% for achievement in PlayerData['achievements'] %}
+          <tr>
+            <th class="td-progressname small">{{ achievement['info'] }}</th>
+            {% for historyDate in PlayerData['playerprogress']['history'] %}
+            <td class="td-playerprogress">{% if achievement['name'] in PlayerData['playerprogress'][historyDate] %}
+            {{ PlayerData['playerprogress'][historyDate][achievement['name']] }}{% endif %}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

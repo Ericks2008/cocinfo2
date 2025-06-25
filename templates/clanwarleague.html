@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<style>
+  .member-level {
+    display: none;
+  }
+  .expand-button::before {
+    content: '+';
+  }
+  .collapse-button::before {
+    content: '-';
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .block {
+    flex: 1 0 400px; /* Adjust the width as needed */
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+</style>
+
+
+<script>
+  function toggleMembers(clanId, levelId) {
+    var members = document.getElementById(clanId + '-' + levelId);
+    var button = document.getElementById(clanId + '-' + levelId + '-button');
+
+    if (members.style.display === 'none') {
+      members.style.display = 'block';
+      button.classList.remove('expand-button');
+      button.classList.add('collapse-button');
+    } else {
+      members.style.display = 'none';
+      button.classList.remove('collapse-button');
+      button.classList.add('expand-button');
+    }
+  }
+</script>
+  {% if ClanWar %}
+  <div class="col-auto">
+    <h1>
+      <img height=50px width=50px src="{{ ClanWar['name']['badgeUrls']['small'] }}" alt=coc>
+      {% block title %}{{ ClanWar['name']['name'] }}{% endblock %}</h1>
+    <h2>{{ ClanWar['season'] }} / {{ ClanWar['state'] }}</h2>
+  </div>
+
+  <ul class="nav nav-tabs fs-6">
+    <li class="nav-item">
+      <a class="nav-link active" href="/clanwarleague?ClanTag={{ ClanWar['name']['tag'][1:] }}">League Group</a>
+    </li>
+    {% for round in ClanWar['rounds'] %}
+    <li class="nav-item">
+      <a class="nav-link {% if round['warTags'][0] == '#0' %} disabled {% endif %}" href="/wartag?ClanTag={{ ClanWar['name']['tag'][1:] }}&Season={{ ClanWar['season'] }}&Day={{ loop.index }}">Round {{ loop.index }}</a>
+    </li>
+    {% endfor %}
+    <li class="nav-item">
+        <a class="nav-link" href="/cwlteam?ClanTag={{ ClanWar['name']['tag'][1:] }}&Season={{ ClanWar['season'] }}">CWL Team</a>
+    </li>
+  </ul>
+  {% endif %}
+
+{% endblock %}
+
+{% block content %}
+  {% if ClanWar %}
+    <div class="container">
+    {% for clan in ClanWar['clans'] %}
+      <div class="block">
+      <table class="table">
+      <tbody>
+      <tr><td>{{ clan['name'] }}&nbsp;/&nbsp;{{ clan['tag'] }}</td></tr>
+      {% for townHallLevel in clan['consolidated_member'] %}
+      <tr><td>
+        <button id="{{ clan['tag'] }}-{{ townHallLevel }}-button" class="expand-button" onclick="toggleMembers('{{ clan['tag'] }}', '{{ townHallLevel }}')"></button>
+        Town Hall {{ townHallLevel }} ( {{ clan['consolidated_member_count'][townHallLevel] }} )
+        <ul id="{{ clan['tag'] }}-{{ townHallLevel }}" class="member-level" style="display: none">
+          {% for member in clan['consolidated_member'][townHallLevel] %}
+          {{ member['name'] }} - {{ member['tag'] }}<br/>
+          {% endfor %}
+        </ul>
+      </td></tr>
+      {% endfor %}
+      </tbody>
+      </table>
+      </div>
+    {% endfor %}
+    </div>
+
+  {% endif %}
+
+{% endblock %}

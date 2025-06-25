@@ -1,0 +1,70 @@
+# .gcloudignore
+# This file specifies files that are *not* uploaded to Google Cloud Platform
+# using gcloud. It follows the same syntax as .gitignore, with the addition of
+# "#!include" directives (which insert the entries of the given .gitignore-style
+# file at that point).
+
+# Ignore common version control files and directories
+.git/
+.gitignore
+
+# Include rules from .gitignore if you want to extend its exclusions
+# #!include:.gitignore
+
+# Python virtual environments
+venv/
+env/
+.venv/
+
+# Python compiled bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Editor/IDE specific files
+.idea/             # PyCharm/IntelliJ IDEA
+.vscode/           # VS Code
+*.sublime-project
+*.sublime-workspace
+
+# Local database files (e.g., SQLite)
+*.sqlite3
+*.db
+
+# Environment variables files (should not be deployed with code)
+.env
+.flaskenv
+
+# Log files
+*.log
+
+# Test-related files
+/tests/            # If you keep tests in a separate directory
+test_*.py
+*_test.py
+
+# Build artifacts or distribution files (if any)
+dist/
+build/
+*.egg-info/
+
+# Configuration files that are not meant for deployment or are sensitive
+# (Be careful here: ensure you handle sensitive configs via App Engine environment variables or Secret Manager)
+config.local.py
+settings_local.py
+
+# Specific to App Engine local development server
+.gcloud/           # Directory created by gcloud for local dev server
+app_dev.yaml       # If you have a separate local dev config file
+*.pydevproject
+.project
+
+# Temporary files
+*.tmp
+*.temp
+*~
+.#*
+
+# Jupyter notebooks or interactive session files
+.ipynb_checkpoints/
+*.ipynb

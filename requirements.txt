@@ -3,3 +3,6 @@ requests
 Werkzeug
 flask_wtf
 wtforms
+google-cloud-secret-manager
+google-cloud-logging
+
