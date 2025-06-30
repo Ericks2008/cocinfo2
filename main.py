@@ -6,6 +6,7 @@ import copy
 import cocparm
 from utils.logger_config import setup_logging
 from utils.get_secret import get_secret_from_secret_manager_auto
+from utils.helper import get_level_badge_class
 
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 from flask_wtf import FlaskForm
@@ -101,7 +102,7 @@ def playerprogress():
     return render_template('playerprogress.html', ThisHTML="player", PlayerData=data)
 
 
-@app.route('/claninfo', methods=['GET', 'POST'])
+@app.route('/claninfo')
 def claninfo():
     data = ""
     playerdata = {}
@@ -111,10 +112,13 @@ def claninfo():
         data = read_from_coc(coc_data_service_url + "/claninfo?ClanTag=" + ClanTag)
     return render_template('claninfo.html', ClanNameTag=ClanTag, ClanData=data, ThisHTML="clan", MemberData=MemberData)
 
-@app.route('/clanprogress', methods=['POST'])
+@app.route('/clanprogress', methods=['GET', 'POST'])
 def clanprogress():
-    clantag = request.form.get('ClanTag')
-    achievement = request.form.get('achievement')
+    clantag = request.args.get('ClanTag')
+    achievement = request.args.get('achievement')
+    if clantag is None:
+        clantag = request.form.get('ClanTag')
+        achievement = request.form.get('achievement')
     if achievement:
         separator = achievement.find(':') - 1
         if separator > 0:
@@ -265,7 +269,7 @@ def supertroops():
     ClanTag = request.args.get('ClanTag')
     if ClanTag:
         data = read_from_coc(coc_data_service_url + "/supertroops?ClanTag=" + ClanTag)
-        return render_template('supertroops.html', ThisHTML='supertroops', activeSuperTroops=data)
+        return render_template('supertroops.html', ThisHTML='supertroops', ClanData=data)
 
 @app.route('/clanwarleague', methods=['GET', 'POST'])
 def clanwarleague():
@@ -335,7 +339,10 @@ def wartag():
                 data['rounds'][temp_a][wartag]['opponent']['members'][i] = temp_member[temp_list[i]]
             if data['rounds'][temp_a][wartag]['clan']['stars'] > data['rounds'][temp_a][wartag]['opponent']['stars'] or ( data['rounds'][temp_a][wartag]['clan']['stars'] == data['rounds'][temp_a][wartag]['opponent']['stars'] and data['rounds'][temp_a][wartag]['clan']['destructionPercentage'] == data['rounds'][temp_a][wartag]['opponent']['destructionPercentage']) :
                 data['rounds'][temp_a][wartag]['result'] = 'win'
-    return render_template('wartag.html', ThisHTML='clanwarleague', ClanWar=data, RoundDay=temp_a, totalMemberList=totalMemberList)
+            else:
+                data['rounds'][temp_a][wartag]['result'] = 'lost'
+    dumpdata = json.dumps(data, indent=4).replace("\n", "<br>").replace(" ", "&nbsp;")   
+    return render_template('wartag.html', ThisHTML='clanwarleague', ClanWar=data, RoundDay=temp_a, totalMemberList=totalMemberList, dumpdata=dumpdata)
 
 @app.route('/cwlteam', methods=['GET', 'POST'])
 def cwlteam():
@@ -467,7 +474,7 @@ def clantroops():
     ClanTag = request.args.get('ClanTag')
     if ClanTag:
         data = read_from_coc(coc_data_service_url + "/clantroops?ClanTag=" + ClanTag)
-    return render_template('clantroops.html', ClanNameTag=ClanTag, ClanData=data, ThisHTML="clan", heroeslist=cocparm.heroeslist, heroequipmentslist=cocparm.heroequipmentslist, petslist=cocparm.petslist, siegemachinelist=cocparm.siegemachinelist, troopslist=cocparm.troopslist, darktroopslist=cocparm.darktroopslist, spellslist=cocparm.spellslist, icon=cocparm.icon, troopsdetail=cocparm.troopsdetail)
+    return render_template('clantroops.html', ClanNameTag=ClanTag, ClanData=data, ThisHTML="clan", heroeslist=cocparm.heroeslist, heroequipmentslist=cocparm.heroequipmentslist, petslist=cocparm.petslist, siegemachinelist=cocparm.siegemachinelist, troopslist=cocparm.troopslist, darktroopslist=cocparm.darktroopslist, spellslist=cocparm.spellslist, icon=cocparm.icon, troopsdetail=cocparm.troopsdetail, get_level_badge_class=get_level_badge_class)
 
 
 if __name__ == '__main__':

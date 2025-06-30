@@ -2,59 +2,76 @@
 
 {% block header %}
   {% if PlayerData %}
-    <div class="col-auto">
-      <h1><img height=50px width=50px src="/static/1_{{ PlayerData["townHallLevel"] }}.png" alt="{{ PlayerData["townHallLevel"] }}">
-      {% block title %}{{ PlayerData["name"] }}{% endblock %}</h1>
+  {% set formatted_playertag = PlayerData['tag'][1:] %}
+
+    <div class="d-flex align-items-center mb-3">
+      <img src="{{ url_for('static', filename='1_' + PlayerData["townHallLevel"]|string + '.png') }}" 
+           alt="TH{{ PlayerData["townHallLevel"] }}" class="me-3" style="max-height: 60px;">
+      <h1>{% block title %}{{ PlayerData["name"] }}{% endblock %}</h1>
     </div>
-    <div class="col-auto">
-      <a href="/player?PlayerTag={{ PlayerData["tag"][1:] }}&DateRange=90"><button type="button" class="btn btn-info">90Days</button></a>
-      <a href="/playerprogress?PlayerTag={{ PlayerData["tag"][1:] }}"><button type="button" class="btn btn-info">Upgrade Progress</button></a>
-      <a href="https://www.clashofstats.com/players/{{ PlayerData["tag"][1:] }}/history/log"><button type="button" class="btn btn-info">History Log</button></a>
+
+    {# Buttons Group #}
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <a href="{{ url_for('player', PlayerTag=formatted_playertag, DateRange=90) }}" class="btn btn-primary btn-sm">90 Days</a>
+      <a href="{{ url_for('playerprogress', PlayerTag=formatted_playertag) }}" class="btn btn-secondary btn-sm">Upgrade Progress</a>
+      <a href="https://www.clashofstats.com/players/{{ formatted_playertag }}/history/log" class="btn btn-outline-info btn-sm"
+        target="_blank" rel="noopener noreferrer">History Log<i class="bi bi-box-arrow-up-right ms-1"></i></a>
     </div>
-    <div class="col-auto form-group">
-      <form action="" method='POST' name="myform">
-        {{ form.cstr_token }}
-        {{ form.submit(class="btn btn-info") }}{{ form.playerdate(class='datepicker form-control') }}{{ form.hidden_tag() }}
-      </form>
+
+    {# Date Picker Form #}
+    <div class="row mb-4 align-items-center">
+      <div class="col-auto">
+        <form action="" method='POST' name="myform" class="d-flex align-items-center">
+          {{ form.csrf_token }}
+          <label for="playerdate" class="me-2 mb-0 fs-6">Select Date:</label>
+          {{ form.playerdate(class='datepicker form-control form-control-sm me-2', id='playerdate') }}
+          {{ form.submit(class="btn btn-primary btn-sm") }}
+        </form>
+      </div>  
+    </div>
+  {% else %}  
+    <div class="alert alert-info text-center" role="alert">
+      Player data is not available.
     </div>
   {% endif %}
 {% endblock %}
 
 {% block content %}
   {% if PlayerData %}
-  <div class="table-container">
-    <table class="header-table-troops">
+  <div class="table-scroll-container">
+    <table class="table table-bordered table-striped table-hover table-sm player-progress-table">
       <thead>
-          <tr>
-            <th class="td-progressname"><label>Player Progress</label></th>
-            {% for historyDate in PlayerData['playerprogress']['history'] %}
-            <th class="td-playerprogress"><label>{{ historyDate[5:] }}</label></th>
-            {% endfor %}
-          </tr>
+        <tr>
+          <th class="sticky-header sticky-column-left sticky-corner">Player Progress</th>
+          {% for historyDate in PlayerData['playerprogress']['history'] %}
+          <th class="sticky-header text-center text-nowrap">{{ historyDate[5:] }}</th>
+          {% endfor %}
+        </tr>
       </thead>
-    </table>
-    <table class="table-troops">
       <tbody>
-          {% for metric in PlayerMetric %}
+        {# Player Metrics #}
+        {% for metric in PlayerMetric %}
           <tr>
-            <th class="td-progressname">{{ metric }}</th>
+            <th class="sticky-column-left text-nowrap">{{ metric }}</th>
             {% for historyDate in PlayerData['playerprogress']['history'] %}
-            <td class="td-playerprogress">{% if metric in PlayerData['playerprogress'][historyDate] %}
-            {{ PlayerData['playerprogress'][historyDate][metric] }}{% endif %}</td>
+              <td class="text-center">{% if metric in PlayerData['playerprogress'][historyDate] %}
+                {{ PlayerData['playerprogress'][historyDate][metric] }}{% else %}-{% endif %}</td>
             {% endfor %}
           </tr>
-          {% endfor %}
-          {% for achievement in PlayerData['achievements'] %}
+        {% endfor %}
+
+        {# Player Achievements #}
+        {% for achievement in PlayerData['achievements'] %}
           <tr>
-            <th class="td-progressname small">{{ achievement['info'] }}</th>
+            <th class="sticky-column-left text-nowrap small">{{ achievement['info'] }}</th>
             {% for historyDate in PlayerData['playerprogress']['history'] %}
-            <td class="td-playerprogress">{% if achievement['name'] in PlayerData['playerprogress'][historyDate] %}
-            {{ PlayerData['playerprogress'][historyDate][achievement['name']] }}{% endif %}</td>
+              <td class="text-center">{% if achievement['name'] in PlayerData['playerprogress'][historyDate] %}
+                {{ PlayerData['playerprogress'][historyDate][achievement['name']] }}{% else %}-{% endif %}</td>
             {% endfor %}
           </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
   {% endif %}
 {% endblock %}

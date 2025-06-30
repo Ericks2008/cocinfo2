@@ -1,97 +1,84 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<style>
-  .member-level {
-    display: none;
-  }
-  .expand-button::before {
-    content: '+';
-  }
-  .collapse-button::before {
-    content: '-';
-  }
 
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .block {
-    flex: 1 0 400px; /* Adjust the width as needed */
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-  }
-
-</style>
-
-
-<script>
-  function toggleMembers(clanId, levelId) {
-    var members = document.getElementById(clanId + '-' + levelId);
-    var button = document.getElementById(clanId + '-' + levelId + '-button');
-
-    if (members.style.display === 'none') {
-      members.style.display = 'block';
-      button.classList.remove('expand-button');
-      button.classList.add('collapse-button');
-    } else {
-      members.style.display = 'none';
-      button.classList.remove('collapse-button');
-      button.classList.add('expand-button');
-    }
-  }
-</script>
   {% if ClanWar %}
-  <div class="col-auto">
-    <h1>
-      <img height=50px width=50px src="{{ ClanWar['name']['badgeUrls']['small'] }}" alt=coc>
-      {% block title %}{{ ClanWar['name']['name'] }}{% endblock %}</h1>
-    <h2>{{ ClanWar['season'] }} / {{ ClanWar['state'] }}</h2>
-  </div>
+    {% set formatted_clantag = ClanWar['name']['tag'][1:] %}
 
-  <ul class="nav nav-tabs fs-6">
-    <li class="nav-item">
-      <a class="nav-link active" href="/clanwarleague?ClanTag={{ ClanWar['name']['tag'][1:] }}">League Group</a>
-    </li>
-    {% for round in ClanWar['rounds'] %}
-    <li class="nav-item">
-      <a class="nav-link {% if round['warTags'][0] == '#0' %} disabled {% endif %}" href="/wartag?ClanTag={{ ClanWar['name']['tag'][1:] }}&Season={{ ClanWar['season'] }}&Day={{ loop.index }}">Round {{ loop.index }}</a>
-    </li>
-    {% endfor %}
-    <li class="nav-item">
-        <a class="nav-link" href="/cwlteam?ClanTag={{ ClanWar['name']['tag'][1:] }}&Season={{ ClanWar['season'] }}">CWL Team</a>
-    </li>
-  </ul>
+    <div class="d-flex align-items-center mb-3">
+      <a href="{{ url_for('claninfo', ClanTag=formatted_clantag) }}" class="text-decoration-none d-flex align-items-center">
+        <img src="{{ ClanWar['name']['badgeUrls']['small'] }}" alt="{{ ClanWar['name']['name'] }}" class="me-3" style="max-height: 60px;">
+        <h1>{% block title %}{{ ClanWar['name']['name'] }} (CWL Group){% endblock %}</h1></a>
+    </div>
+    <h2 class="mb-3">{{ ClanWar['season'] }} / {{ ClanWar['state'] }}</h2>
+
+    <ul class="nav nav-tabs fs-6 mb-4">
+      <li class="nav-item">
+          <a class="nav-link active" href="{{ url_for('clanwarleague', ClanTag=formatted_clantag) }}">League Group</a>
+      </li>
+      {% for round in ClanWar['rounds'] %}
+        <li class="nav-item">
+        <a class="nav-link {% if round['warTags'][0] == '#0' %} disabled {% endif %}" 
+           href="{{ url_for('wartag', ClanTag=formatted_clantag, Season=ClanWar['season'], Day=loop.index) }}">Round {{ loop.index }}</a>
+        </li>
+      {% endfor %}
+      <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('cwlteam', ClanTag=formatted_clantag, Season=ClanWar['season']) }}">CWL Team</a>
+      </li>
+    </ul>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      Clan War League data is unavailable.
+    </div>  
   {% endif %}
 
 {% endblock %}
 
 {% block content %}
   {% if ClanWar %}
-    <div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     {% for clan in ClanWar['clans'] %}
-      <div class="block">
-      <table class="table">
-      <tbody>
-      <tr><td>{{ clan['name'] }}&nbsp;/&nbsp;{{ clan['tag'] }}</td></tr>
-      {% for townHallLevel in clan['consolidated_member'] %}
-      <tr><td>
-        <button id="{{ clan['tag'] }}-{{ townHallLevel }}-button" class="expand-button" onclick="toggleMembers('{{ clan['tag'] }}', '{{ townHallLevel }}')"></button>
-        Town Hall {{ townHallLevel }} ( {{ clan['consolidated_member_count'][townHallLevel] }} )
-        <ul id="{{ clan['tag'] }}-{{ townHallLevel }}" class="member-level" style="display: none">
-          {% for member in clan['consolidated_member'][townHallLevel] %}
-          {{ member['name'] }} - {{ member['tag'] }}<br/>
-          {% endfor %}
-        </ul>
-      </td></tr>
-      {% endfor %}
-      </tbody>
-      </table>
+      <div class="col">
+        <div class="card h-100">
+          <div class="card-header">
+            <h5 class="mb-0">{{ clan['name'] }}<small class="text-muted">{{ clan['tag'] }}</small></h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            {% for townHallLevel in clan['consolidated_member'] %}
+              <li class="list-group-item">
+                <button class="btn btn-link p-0 text-decoration-none d-flex justify-content-between align-items-center w-100"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse{{ clan['tag'] | replace('#', '') }}-{{ townHallLevel }}"
+                        aria-expanded="false"
+                        aria-controls="collapse{{ clan['tag'] | replace('#', '') }}-{{ townHallLevel }}">
+                  <span>
+                    <i class="bi bi-caret-right-fill collapse-icon"></i> {# Placeholder for icon, requires Bootstrap Icons #}
+                    Town Hall {{ townHallLevel }} ({{ clan['consolidated_member_count'][townHallLevel] }})
+                  </span>
+                </button>                        
+                <div class="collapse" id="collapse{{ clan['tag'] | replace('#', '') }}-{{ townHallLevel }}">
+                  <ul class="list-group list-group-flush mt-2"> {# Nested list for members #}
+                    {% for member in clan['consolidated_member'][townHallLevel] %}
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('player', PlayerTag=member['tag'][1:]) }}" class="text-decoration-none">
+                          {{ member['name'] }}
+                        </a>
+                        <span class="text-muted">{{ member['tag'] }}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
     {% endfor %}
     </div>
-
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      Clan War League group data is unavailable.
+    </div>
   {% endif %}
-
 {% endblock %}

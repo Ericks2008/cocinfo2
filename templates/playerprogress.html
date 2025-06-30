@@ -2,35 +2,48 @@
 
 {% block header %}
   {% if PlayerData %}
-    <div class="col-auto">
-      <h1><img height=50px width=50px src="/static/1_{{ PlayerData["townHallLevel"] }}.png" alt="{{ PlayerData["townHallLevel"] }}">
-      {% block title %}{{ PlayerData["name"] }}{% endblock %}</h1>
+  {% set formatted_playertag = PlayerData['tag'][1:] %}
+
+    <div class="d-flex align-items-center mb-3">
+      <img src="{{ url_for('static', filename='1_' + PlayerData["townHallLevel"]|string + '.png') }}" 
+        alt="TH{{ PlayerData["townHallLevel"] }}" class="me-3" style="max-height: 60px;">
+      <h1>{% block title %}{{ PlayerData["name"] }}{% endblock %}</h1>
     </div>
-    <div class="col-auto">
-      <a href="/player?PlayerTag={{ PlayerData["tag"][1:] }}&DateRange=90"><button type="button" class="btn btn-info">90Days</button></a>
-      <a href="https://www.clashofstats.com/players/{{ PlayerData["tag"][1:] }}/history/log"><button type="button" class="btn btn-info">History Log</button></a>
+
+    {# Buttons Group #}
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <a href="{{ url_for('player', PlayerTag=formatted_playertag, DateRange=90) }}" class="btn btn-primary btn-sm">90Days</a>
+      <a href="{{ url_for('playerprogress', PlayerTag=formatted_playertag) }}" class="btn btn-secondary btn-sm active" aria-current="page">Upgrade Progress</a>
+      <a href="https://www.clashofstats.com/players/{{ formatted_playertag }}/history/log" class="btn btn-secondary btn-sm"
+        target="_blank" rel="noopener noreferrer">History Log<i class="bi bi-box-arrow-up-right ms-1"></i></a>
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      Player data is not available.
     </div>
   {% endif %}
 {% endblock %}
 
 {% block content %}
   {% if PlayerData %}
-    <div class="table">
-      <table class="table">
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover table-sm">
+        <thead>
+          <tr>
+            <th class="text-nowrap">Upgrade Date</th>
+            <th class="text-nowrap">Category</th>
+            <th class="text-nowrap">Level</th>
+          </tr>
+        </thead>
         <tbody>
-          <tr>
-            <th><label>Player Progress</label></th>
-            <th><label>spells / troops / heros</label></th>
-            <th><label>level</label></th>
-          </tr>
-          {% for upgradedate in PlayerData['upgradeprogress'].keys() %}
-          {% for item in PlayerData['upgradeprogress'][upgradedate].keys() %}
-          <tr>
-            <td>{{ upgradedate }}</td>
-            <td>{{ item }}</td>
-            <td>{{ PlayerData['upgradeprogress'][upgradedate][item] }}</td>
-          </tr>
-          {% endfor %}
+          {% for upgradedate in PlayerData['upgradeprogress'].keys()|sort(reverse=True) %}
+            {% for item_name, item_level in PlayerData['upgradeprogress'][upgradedate].items() %}
+              <tr>
+                <td class="text-nowrap">{{ upgradedate[5:] }}</td>
+                <td class="text-nowrap">{{ item_name }}</td>
+                <td class="text-nowrap">{{ item_level }}</td>
+              </tr>
+            {% endfor %}
           {% endfor %}
         </tbody>
       </table>

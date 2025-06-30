@@ -1,28 +1,55 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  {% if activeSuperTroops %}
-    <div class="col-auto">
-      <h1>{% block title %}Active Super Troops{% endblock %}</h1>
+  {% if ClanData %}
+    {% set formatted_clantag = ClanData['tag'][1:] %}
+
+    <div class="d-flex align-items-center mb-3">
+      <a href="{{ url_for('claninfo', ClanTag=formatted_clantag) }}" class="text-decoration-none d-flex align-items-center">
+        <img src="{{ ClanData['badgeUrls']['small'] }}" alt={{ ClanData['name'] }} class="me-3" style="max-height: 60px;">
+        <h1>{% block title %}{{ ClanData['name'] }} Super Troops{% endblock %}</h1></a>
     </div>
+
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <a href="{{ url_for('currentwar', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Current War</a>
+      {% if ClanData['isWarLogPublic'] %}
+      <a href="{{ url_for('clanwarlog', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">War Log</a>
+      {% endif %}
+      <a href="{{ url_for('clanprogress', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Clan Progress</a>
+      <a href="{{ url_for('supertroops', ClanTag=formatted_clantag) }}" class="btn btn-primary btn-sm active">Super Troops</a>
+      <a href="{{ url_for('clanwarleague', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">CWL (local)</a>
+      <a href="{{ url_for('clantroops', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Troops</a>
+
+      <a href="https://www.clashofstats.com/clans/{{ formatted_clantag }}/history/past-members" class="btn btn-outline-info btn-sm"
+        target="_blank" rel="noopener noreferrer">Past Members<i class="bi bi-box-arrow-up-right ms-1"></i></a>
+    </div>
+
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        Clan data is unavailable.
+    </div>
+
   {% endif %}
 {% endblock %}
 
 {% block content %}
-  {% if activeSuperTroops %}
-    <div class="table">
-      <table class="table">
-        <tbody>
+  {% if ClanData %}
+  {% set activeSuperTroops = ClanData['activeSuperTroops'] %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover align-middle">
+        <thead>
           <tr>
-            <th><label>Super Troops</label></th>
-            <th><label>Member</label></th>
+            <th class="text-nowrap">Super Troop</th>
+            <th class="text-nowrap">Active Members</th>
           </tr>
-          {% for troops in activeSuperTroops %}
+        </thead>
+        <tbody>
+          {% for troops_name, members_list in activeSuperTroops.items()  %}
           <tr>
-            <td>{{ troops }}</td>
+            <td>{{ troops_name }}</td>
             <td>
-            {% for member in activeSuperTroops[troops] %}
-            {{ member }}<br/>
+            {% for member in members_list %}
+              <span class="badge text-bg-secondary py-1 px-2">{{ member }}</span>
             {% endfor %}
             </td>
           </tr>

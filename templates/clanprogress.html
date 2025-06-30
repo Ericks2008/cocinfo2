@@ -2,26 +2,38 @@
 
 {% block header %}
   {% if ClanData %}
-    <div class="col-auto">
-      <h1><a href="/claninfo?ClanTag={{ ClanData["tag"][1:] }}"><img src="{{ ClanData['badgeUrls']['small'] }}" alt=coc>{% block title %}{{ ClanData["name"] }}{% endblock %}</a></h1>
+  {% set formatted_clantag = ClanData['tag'][1:] %}
+
+    <div class="d-flex align-items-center mb-3">
+      <a href="{{ url_for('claninfo', ClanTag=formatted_clantag) }}" class="text-decoration-none d-flex align-items-center">
+        <img src="{{ ClanData['badgeUrls']['small'] }}" alt="{{ ClanData['name'] }}" class="me-3" style="max-height: 60px;">
+        <h1>{% block title %}{{ ClanData['name'] }} Clan Progress{% endblock %}</h1></a>
     </div>
-    <div class="col-auto">
-      <a href="/currentwar?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">CurrentWar</button></a>
+
+    <div class="d-flex flex-wrap gap-2 mb-4">
+      <a href="{{ url_for('currentwar', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Current War</a>
       {% if ClanData['isWarLogPublic'] %}
-      <a href="/clanwarlog?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">ClanWarLog</button></a>
+      <a href="{{ url_for('clanwarlog', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">War Log</a>
       {% endif %}
-      <button type="submit" form="myForm" class="btn btn-info" name="clanprogress">ClanProgress</button>
-      <a href="/supertroops?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">SuperTroops</button></a>
-      <a href="/clanwarleague?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">Clan War League (local)</button></a>
-      <a href="/clantroops?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">Troops</button></a>
+      <a href="{{ url_for('clanprogress', ClanTag=formatted_clantag) }}" class="btn btn-primary btn-sm active">Clan Progress</a>
+      <a href="{{ url_for('supertroops', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Super Troops</a>
+      <a href="{{ url_for('clanwarleague', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">CWL (local)</a>
+      <a href="{{ url_for('clantroops', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Troops</a>
+
+      <a href="https://www.clashofstats.com/clans/{{ formatted_clantag }}/history/past-members" class="btn btn-outline-info btn-sm"
+        target="_blank" rel="noopener noreferrer">Past Members<i class="bi bi-box-arrow-up-right ms-1"></i></a>
+ 
     </div>
-    </p>
-    <div class="col-auto">
-      <form action="/clanprogress" method="post" id="myForm">
-        <input type="hidden" name="ClanTag" value="{{ ClanData["tag"][1:] }}" />
-        <input class="form-control" list="achievements" name="achievement" id="achievement" value="{{ ClanData['clanprogress']['name'] }}{% for achievements in ClanData['achievements'] %}{% if achievements['name'] == ClanData['clanprogress']['name']%} : {{ achievements['info'] }}{% endif %}{% endfor %}">
-        <button type="submit" form="myForm" class="btn btn-info" name="refresh">refresh</button>
-        <datalist id="achievements">
+    
+    <div class="mb-4">
+        <form action="{{ url_for('clanprogress') }}" method="post" id="clanProgressRefreshForm" class="d-flex flex-wrap gap-2 align-items-end">
+        <input type="hidden" name="ClanTag" value="{{ formatted_clantag }}" />
+        <div class="form-floating flex-grow-1">
+        <input class="form-control" list="achievementsDataList" name="achievement" id="achievement" 
+            value="{{ ClanData['clanprogress']['name'] }}{% for achievements in ClanData['achievements'] %}{% if achievements['name'] == ClanData['clanprogress']['name']%} : {{ achievements['info'] }}{% endif %}{% endfor %}"
+            placeholder="Select an achievement">
+
+        <datalist id="achievementsDataList">
           <option value="attackWins">
           <option value="donations">
           <option value="donationsReceived">
@@ -29,27 +41,40 @@
           <option value="{{ achievements['name'] }} : {{ achievements['info'] }}">
           {% endfor %}
         </datalist>
+        </div>
+
+        <button type="submit" form="clanProgressRefreshForm" class="btn btn-info" name="refresh">Refresh Progress</button>
+
       </form>
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        Clan data ia unavailable.
     </div>
   {% endif %}
 {% endblock %}
 
 {% block content %}
 {% if ClanData %}
-  <div class="table">
-    <table class="table-troops">
-      <tbody>
+  <div class="table-responsive" style="max-height: 90vh; overflow-y: auto;">
+    <table class="table table-striped table-hover table-sm">
+      <thead>
         <tr>
-          <th class="td-progressname" style="z-index : 9999; position: sticky; top: 0;"><label>{{ ClanData['clanprogress']['name'] }}</label></th>
+          <th class="sticky-header" style="left: 0; z-index : 1020;">
+              <label>{{ ClanData['clanprogress']['name'] | default('Metric') }}</label></th>
           {% for historyDate in ClanData['clanprogress']['history'] %}
-          <th class="td-playerprogress" style="position: sticky; z-index: 9998; top: 0;"><label>{{ historyDate[-5:] }}</label></th>
+          <th class="text-center sticky-header" style="z-index: 1010;">
+              <label>{{ historyDate[-5:] }}</label></th>
           {% endfor %}
         </tr>
-        {% for Member in ClanData["memberList"] %}
+      </thead>
+      <tbody>
+        {% for member in ClanData["memberList"] %}
           <tr>
-            <th class="td-playerprogress"><a href="/player?PlayerTag={{ Member["tag"][1:] }}">{{ Member["name"] }}</a></th>
-            {% for historyDate in ClanData['clanprogress']['history'] %}
-            <td class="td-playerprogress">{{ Member['clanprogress'][historyDate] }}</td>
+            <th class="sticky-header" style="left: 0; z-index: 1000;">
+                <a href="{{ url_for('player', PlayerTag=member["tag"][1:]) }}" class="text-decoration-none">{{ member["name"] }}</a></th>
+            {% for history_date in ClanData['clanprogress']['history'] %}
+            <td class="text-center">{{ member['clanprogress'][history_date] }}</td>
             {% endfor %}
           </tr>
         {% endfor %}
@@ -58,3 +83,5 @@
   </div>
 {% endif %}
 {% endblock %}
+
+

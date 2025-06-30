@@ -2,120 +2,125 @@
 
 {% block header %}
   {% if ClanData %}
-    <div class="col-auto">
-      <h1><a href="/claninfo?ClanTag={{ ClanData["tag"][1:] }}"><img src="{{ ClanData['badgeUrls']['small'] }}" alt=coc>{% block title %}{{ ClanData["name"] }}{% endblock %}</a></h1>
+    {% set formatted_clantag = ClanData['tag'][1:] %}
+
+    <div class="d-flex align-items-center mb-3">
+      <a href="{{ url_for('claninfo', ClanTag=formatted_clantag) }}" class="text-decoration-none d-flex align-items-center">
+        <img src="{{ ClanData['badgeUrls']['small'] }}" alt="{{ ClanData['name'] }}" class="me-3">
+        <h1>{% block title %}{{ ClanData['name'] }} Troops{% endblock %}</h1></a>
     </div>
-    <form action="/clanprogress" method="post" id="myForm">
-      <input type="hidden" name="ClanTag" value="{{ ClanData["tag"][1:] }}" />
-    </form>
-    <div class="col-auto">
-      <a href="/currentwar?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">CurrentWar</button></a>
+
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <a href="{{ url_for('currentwar', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Current War</a>
       {% if ClanData['isWarLogPublic'] %}
-      <a href="/clanwarlog?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">ClanWarLog</button></a>
+      <a href="{{ url_for('clanwarlog', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">War Log</a>
       {% endif %}
-      <button type="submit" form="myForm" class="btn btn-info" name="clanprogress">ClanProgress</button>
-      <a href="/supertroops?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">SuperTroops</button></a>
-      <a href="/clanwarleague?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">Clan War League (local)</button></a>
-      <a href="/clantroops?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">Troops</button></a>
+      <a href="{{ url_for('clanprogress', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Clan Progress</a>
+      <a href="{{ url_for('supertroops', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Super Troops</a>
+      <a href="{{ url_for('clanwarleague', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">CWL (local)</a>
+      <a href="{{ url_for('clantroops', ClanTag=formatted_clantag) }}" class="btn btn-primary active btn-sm">Troops</a>
+
+      <a href="https://www.clashofstats.com/clans/{{ formatted_clantag }}/history/past-members" class="btn btn-outline-info btn-sm"
+        target="_blank" rel="noopener noreferrer">Past Members<i class="bi bi-box-arrow-up-right ms-1"></i></a>
+
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      Clan data is unavailable.
     </div>
   {% endif %}
 {% endblock %}
 
 {% block content %}
   {% if ClanData %}
-    <div class="table-container">
-      <table class="header-table-troops">
+    <div class="table-responsive table-scroll-container">
+      <table class="table table-striped table-hover table-sm player-progress-table">
         <thead>
           <tr>
-          <th class="td-item"><label>TH</label></th>
-          <th class="td-membername" style ="z-index : 9999;"><label>Member</label></th>
+          <th class="sticky-header sticky-th-col">TH</th>
+          <th class="sticky-header sticky-corner">Member</th>
+
+          {# Hero Headers #}
           {% for item in heroeslist %}
-          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th><th class="td-item"></th><th class="td-item"></th>
+            <th class="text-center sticky-header" colspan="3">
+              <img height="30" width="30" src="{{ url_for('static', filename=icon[item]) }}" alt="{{ item }}" 
+              class="rounded border border-warning d-block mx-auto mb-1"></th>
           {% endfor %}
+
+          {# Hero Equipment Headers #}
           {% for item in heroequipmentslist %}
-          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
+          <th class="text-center sticky-header">
+              <img height="30" width="30" src="{{ url_for('static', filename=icon[item]) }}" alt="{{ item }}" 
+              class="rounded border border-warning d-block mx-auto mb-1"></th>
           {% endfor %}
-          {% for item in petslist %}
-          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
+
+          {# Pets, Sieges, Troops, Dark Troops, Spells #}
+          {% for item_type in [petslist, siegemachinelist, troopslist, darktroopslist, spellslist] %}
+            {% for item in item_type %}
+              <th class="text-center sticky-header">
+                <img height="30" width="30" src="{{ url_for('static', filename=icon[item]) }}" alt="{{ item }}" 
+                class="rounded border border-warning d-block mx-auto mb-1"></th>
+            {% endfor %}
           {% endfor %}
-          {% for item in siegemachinelist %}
-          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
-          {% endfor %}
-          {% for item in troopslist %}
-          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
-          {% endfor %}
-          {% for item in darktroopslist %}
-          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
-          {% endfor %}
-          {% for item in spellslist %}
-          <th class="td-item"><img height=30px width=30px src="/static/{{ icon[item] }}" alt="{{ item }}" class="rounded border border-warning"></th>
-          {% endfor %}
-          </tr>
+         </tr>
         </thead>
-      </table>
-      <table class="table-troops">
         <tbody>
-          {% for Member in ClanData["memberList"] %}
+          {% for member in ClanData["memberList"] %}
             <tr>
-              <th class="td-item"><img height=30px width=30px src="/static/1_{{ Member['townHallLevel'] }}.png" alt="{{ Member['townHallLevel'] }}"></th>
-              <th class="td-membername"><a href="/player?PlayerTag={{ Member["tag"][1:] }}">{{ Member["name"] }}</a></th>
-              {% for item in heroeslist %}
-                {% if Member['detail']['heroeslist'][item] is defined %}
-                <td class="td-item"><span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['heroeslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['heroeslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">{{ Member['detail']['heroeslist'][item]['level'] }}</span></td>
-                  {% if Member['detail']['heroeslist'][item]['equipment'] is defined %}
-                    {% for equipment in Member['detail']['heroeslist'][item]['equipment'] %}
-                    <td class="td-item"><img height=30px width=30px src="/static/{{ icon[equipment['name']] }}" alt="{{ equipment['name'] }}"></td>
-                    {% endfor %}
-                  {% else %}
-                    <td class="td-item">&nbsp;</td><td class="td-item">&nbsp;</td>
+              {# sticky th and member name for each row #}
+              <th class="sticky-column-left">
+                  <img height="30" width="30" src="{{ url_for('static', filename='1_' + member['townHallLevel']|string + '.png') }}" 
+                  alt="TH{{ member['townHallLevel'] }}"></th>
+              <th class="sticky-column-left">
+                  <a href="{{ url_for('player', PlayerTag=member['tag'][1:]) }} class="text-decoration-none">{{ member['name'] }}</a></th>
+
+              {# hero levels and their equipment #}
+              {% for hero_item in heroeslist %}
+                {% set hero_data = member['detail']['heroeslist'][hero_item] %}
+                <td class="text-center">
+                  {% if hero_data is defined %}
+                    <span class="badge {{ get_level_badge_class(hero_data.level, troopsdetail[hero_item], member.townHallLevel) }}">
+                      {{ hero_data.level }}</span>
                   {% endif %}
-                {% else %}
-                  <td class="td-item">&nbsp;</td><td class="td-item">&nbsp;</td><td class="td-item">&nbsp;</td>
-                {% endif %}
+                 </td>  
+
+                {# hero equipment slots - always 2 #}
+                {% for i in range(2) %}
+                  <td class="text-center">
+                    {% if hero_data is defined and hero_data.equipment is defined and hero_data.equipment[i] is defined %}
+                      <img height="30" width="30" src="{{ url_for('static', filename=icon[hero_data.equipment[i].name]) }}" 
+                        alt="{{ hero_data.equipment[i].name }}">
+                    {% else %}
+                      &nbsp;
+                    {% endif %}
+                  </td>  
+                {% endfor %}
               {% endfor %}
+
+              {# hero equipment levels #}
               {% for item in heroequipmentslist %}
-                <td class="td-item">{% if Member['detail']['heroEquipmentlist'] is defined %}
-                  {% if Member['detail']['heroEquipmentlist'][item] is defined %}
-                  <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['heroEquipmentlist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['heroEquipmentlist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
-                  {{ Member['detail']['heroEquipmentlist'][item]['level'] }}
-                  </span>
-                  {% endif %}
-                  {% endif %}</td>
+                <td class="text-center">
+                    {% set eq_data = member['detail']['heroEquipmentlist'][item] %}  
+                    {% if eq_data is defined %}
+                      <span class="badge {{ get_level_badge_class(eq_data.level, troopsdetail[item], member.townHallLevel) }}">
+                        {{ eq_data.level }}
+                      </span>
+                    {% endif %}
+                </td>   
               {% endfor %}
-              {% for item in petslist %}
-              <td class="td-item">{% if Member['detail']['troopslist'][item] is defined %}
-                <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['troopslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['troopslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
-                {{ Member['detail']['troopslist'][item]['level'] }}
-                </span>
-                {% endif %}</td>
-              {% endfor %}
-              {% for item in siegemachinelist %}
-              <td class="td-item">{% if Member['detail']['troopslist'][item] is defined %}
-                <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['troopslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['troopslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
-                {{ Member['detail']['troopslist'][item]['level'] }}
-                </span>
-                {% endif %}</td>
-              {% endfor %}
-              {% for item in troopslist %}
-              <td class="td-item">{% if Member['detail']['troopslist'][item] is defined %}
-                <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['troopslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['troopslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
-                {{ Member['detail']['troopslist'][item]['level'] }}
-                </span>
-                {% endif %}</td>
-              {% endfor %}
-              {% for item in darktroopslist %}
-              <td class="td-item">{% if Member['detail']['troopslist'][item] is defined %}
-                <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['troopslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['troopslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
-                {{ Member['detail']['troopslist'][item]['level'] }}
-                </span>
-                {% endif %}</td>
-              {% endfor %}
-              {% for item in spellslist %}
-              <td class="td-item">{% if Member['detail']['spellslist'][item] is defined %}
-                <span class="badge {% if troopsdetail[item] is defined %}{% if Member['detail']['spellslist'][item]['level'] < troopsdetail[item][Member['townHallLevel']]['min'] %}bg-danger{% else %}{% if Member['detail']['spellslist'][item]['level'] == troopsdetail[item][Member['townHallLevel']]['max'] %}bg-success{% else %}bg-secondary{% endif %}{% endif %}{% else %}bg-secondary{% endif %}">
-                {{ Member['detail']['spellslist'][item]['level'] }}
-                </span>
-                {% endif %}</td>
+
+              {# Pets, Sieges, Troops, Dark Troops, Spells Levels #}  
+              {% for item_type_list in [petslist, siegemachinelist, troopslist, darktroopslist, spellslist] %}
+                {% for item in item_type_list %}
+                  <td class="text-center">
+                    {% set item_data = member['detail']['troopslist'][item] if item_type_list != spellslist else member['detail']['spellslist'][item] %}
+                    {% if item_data is defined %}
+                      <span class="badge {{ get_level_badge_class(item_data.level, troopsdetail[item], member.townHallLevel) }}">
+                        {{ item_data.level }}
+                      </span>
+                    {% endif %}
+                  </td>
+                {% endfor %}
               {% endfor %}
             </tr>
           {% endfor %}
@@ -124,3 +129,5 @@
     </div>
   {% endif %}
 {% endblock %}
+
+

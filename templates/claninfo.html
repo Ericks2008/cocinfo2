@@ -2,52 +2,73 @@
 
 {% block header %}
   {% if ClanData %}
-    <div class="col-auto">
-      <h1><img src="{{ ClanData['badgeUrls']['small'] }}" alt=coc>{% block title %}{{ ClanData["name"] }}{% endblock %}</h1>
+  {% set formatted_clantag = ClanData['tag'][1:] %}
+
+    <div class="d-flex align-items-center mb-3">
+        <img src="{{ ClanData['badgeUrls']['small'] }}" alt={{ ClanData['name'] }} class="me-3">
+        <h1>{% block title %}{{ ClanData["name"] }}{% endblock %}</h1>
     </div>
-    <form action="/clanprogress" method="post" id="myForm">
-      <input type="hidden" name="ClanTag" value="{{ ClanData["tag"][1:] }}" />
-    </form>
-    <div class="col-auto">
-      <a href="/currentwar?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">CurrentWar</button></a>
+
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <a href="{{ url_for('currentwar', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Current War</a>
       {% if ClanData['isWarLogPublic'] %}
-      <a href="/clanwarlog?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">ClanWarLog</button></a>
+      <a href="{{ url_for('clanwarlog', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">War Log</a>
       {% endif %}
-      <button type="submit" form="myForm" class="btn btn-info" name="clanprogress">ClanProgress</button>
-      <a href="/supertroops?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">SuperTroops</button></a>
-      <a href="/clanwarleague?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">Clan War League (local)</button></a>
-      <a href="/clantroops?ClanTag={{ ClanData["tag"][1:] }}"><button type="button" class="btn btn-info">Troops</button></a>
+      <a href="{{ url_for('clanprogress', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Clan Progress</a>
+      <a href="{{ url_for('supertroops', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Super Troops</a>
+      <a href="{{ url_for('clanwarleague', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">CWL (local)</a>
+      <a href="{{ url_for('clantroops', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Troops</a>
+
+      <a href="https://www.clashofstats.com/clans/{{ formatted_clantag }}/history/past-members" class="btn btn-outline-info btn-sm"
+        target="_blank" rel="noopener noreferrer">Past Members<i class="bi bi-box-arrow-up-right ms-1"></i></a>
+
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        Clan data is unavailable.
     </div>
   {% endif %}
 {% endblock %}
 
 {% block content %}
   {% if ClanData %}
-    <div class="table">
-      <table class="table">
-        <tbody>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle">
+        <thead>
           <tr>
-            <th><label>League</label></th>
+            <th class="text-center">League</th>
             <th></th>
-            <th><label>Member</label></th>
-            <th><label>Role / warPref</label></th>
-            <th><label>Donated</label></th>
-            <th><label>Received</label></th>
-            <th><label>AttackWins</label></th>
-            <th><label>past 6 month</label></th>
+            <th class="text-center">Member</th>
+            <th class="text-center">Role / warPref</th>
+            <th class="text-center">Donated</th>
+            <th class="text-center">Received</th>
+            <th class="text-center">AttackWins</th>
+            <th class="text-center">Past CWL Stats</th>
           </tr>
-          {% for Member in ClanData["memberList"] %}
+        </thead>
+        <tbody>
+          {% for member in ClanData['memberList'] %}
             <tr>
-              <td><img src="{{ Member["league"]["iconUrls"]["tiny"] }}" alt="coc"></td>
-              <td><img height=40px width=40px src="/static/1_{{ Member['townHallLevel'] }}.png" alt="{{ Member['townHallLevel'] }}"></td>
+              <td class="text-center"><img src="{{ member['league']['iconUrls']['tiny'] }}" alt="{{ member['league']['name'] }}" class="img-fluid"></td>
+              <td class="text-center"><img height=40px width=40px src="{{ url_for('static', filename='1_' + member['townHallLevel']|string + '.png') }}" 
+                         alt="{{ member['townHallLevel'] }}" class="img-fluid"></td>
               <td>
-                <a href="/player?PlayerTag={{ Member["tag"][1:] }}">
-                {{ Member["name"] }}</br><div class="initialism">{{ Member["tag"] }}</div></a></td>
-              <td class="{% if Member["warPreference"] == "in" %}table-success{% else %}table-danger{% endif %}">{% if Member["role"] == "admin" %}Elder{% else %}{{ Member["role"] }}{% endif %}</td>
-              <td>{{ Member["donations"] }}</td>
-              <td>{{ Member["donationsReceived"] }}</td>
-              <td>{{ Member['attackWins'] }}</td>
-              <td><a href="https://clashspot.net/en/player/{{ Member["tag"][1:] }}/war-statistics/home-village?type=cwl&month=6"><button type="button" class="btn btn-info">CWL</button></a></td>
+                <a href="{{ url_for('player', PlayerTag=member['tag'][1:]) }}" class="text-decoration-none">
+                  <strong>{{ member['name'] }}</strong></br>
+                  <small class="text-muted">{{ member["tag"] }}</small></a></td>
+              <td class="text-center {% if member["warPreference"] == "in" %}table-success{% else %}table-danger{% endif %}">
+                  {% if member["role"] == "admin" %}Elder{% else %}{{ member["role"] }}{% endif %}
+                {% if member["warPreference"] == "in" %}
+                  <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> In War</span> {# Bootstrap icon example #}
+                {% elif member["warPreference"] == "out" %}
+                  <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Out of War</span>
+               {% endif %}
+              </td>
+              <td class="text-center">{{ member["donations"] }}</td>
+              <td class="text-center">{{ member["donationsReceived"] }}</td>
+              <td class="text-center">{{ member['attackWins'] }}</td>
+              <td class="text-center"><a href="https://clashspot.net/en/player/{{ member["tag"][1:] }}/war-statistics/home-village?type=cwl&month=6" 
+                      target="_blank" rel="noopener noreferrer" class="btn btn-outline-info btn-sm">CWL Stats</a></td>
             </tr>
           {% endfor %}
         </tbody>

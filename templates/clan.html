@@ -1,46 +1,53 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}&#32085;&#22320;&#36870;&#35186;&#23478;&#26063;{% endblock%}</h1>
+<h1>{% block title %}&#32085;&#22320;&#36870;&#35186;&#23478;&#26063;{% endblock%}</h1>
 {% endblock %}
 
 {% block content %}
   {% if ClanData %}
-    <div class="table">
-      <table class="table">
+    <div class="table-responsive">
+      <table class="table table-hover table-striped align-middle">
         <tbody>
           {% for ClanUnit in ClanData %}
+            {% set formatted_clantag = ClanUnit['tag'][1:] %}
             <tr>
-              <td><img src="{{ ClanUnit["badgeUrls"]["small"] }}" alt="coc" class='optional-info'></td>
-              <td><a href="./claninfo?ClanTag={{ ClanUnit["tag"][1:] }}">{{ ClanUnit["name"] }}</br>{{ ClanUnit["tag"] }}</a></td>
-              <td>&#x1F9cd;{{ ClanUnit["members"]}}</td>
-              <td>{{ ClanUnit["warLeague"]["name"] }}</td>
-              <td>
-                <div class="dropdown col-auto">
-                  <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown">
+                <td class="text-center"><img src="{{ ClanUnit['badgeUrls']['small'] }}" alt="{{ ClanUnit['name'] }}" class='img-fluid'></td>
+                <td class="text-center"><a href="{{ url_for('claninfo', ClanTag=formatted_clantag ) }}" class="text-decoration-none">
+                      <strong>{{ ClanUnit["name"] }}</strong></br>
+                      <small class="text-muted">{{ ClanUnit["tag"] }}</small></a></td>
+                <td class="text-center"><i class="bi bi-people-fill me-1"></i>{{ ClanUnit["members"]}}</td>
+              <td class="text-center">{{ ClanUnit["warLeague"]["name"] }}</td>
+              <td class="text-center">
+                <div class="d-grid d-md-flex gap-1 justify-content-md-center">
+                    <div class="dropdown">  
+                  <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     ClanWar
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/currentwar?ClanTag={{ ClanUnit["tag"][1:] }}">CurrentWar</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('currentwar', ClanTag=formatted_clantag) }}">CurrentWar</a></li>
                     {% if ClanUnit['isWarLogPublic'] %}
-                    <li><a class="dropdown-item" href="/clanwarlog?ClanTag={{ ClanUnit["tag"][1:] }}">ClanWarLog</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('clanwarlog', ClanTag=formatted_clantag) }}">ClanWarLog</a></li>
                     {% endif %}
                   </ul>
-                  <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown">
-                    CWL (Online)
+                  <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    CWL (External)
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="https://www.clashofstats.com/clans/{{ ClanUnit["tag"][1:] }}/wars/cwl/current/cards">CWL (clashofstats)</a></li>
-                    <li><a class="dropdown-item" href="https://clashspot.net/en/clan/{{ ClanUnit["tag"][1:] }}/clan-war-leagues/home-village">CWL (clashspot)</a></li>
+                    <li><a class="dropdown-item" href="https://www.clashofstats.com/clans/{{ formatted_clantag }}/wars/cwl/current/cards"
+                            target="_blank" rel="noopener noreferrer">ClashOfStats</a></li>
+                    <li><a class="dropdown-item" href="https://clashspot.net/en/clan/{{ formatted_clantag }}/clan-war-leagues/home-village"
+                            target="_blank" rel="noopener noreferrer">ClashSpot</a></li>
                   </ul>
-                  <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown">
+                  <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     CWL (local)
                   </button>
                   <ul class="dropdown-menu">
                     {% for season in ClanUnit['CWLlist'] %}
-                    <li><a class="dropdown-item" href="/clanwarleague?ClanTag={{ ClanUnit["tag"][1:] }}&amp;Season={{ season }}">{{ season }}</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('clanwarleague', ClanTag=formatted_clantag, Season=season ) }}">{{ season }}</a></li>
                     {% endfor %}
                   </ul>
+                    </div>
                 </div>
               </td>
             </tr>
@@ -48,5 +55,7 @@
         </tbody>
       </table>
     </div>
+  {% else %}
+    <p class="text-muted text-center">No clan data found.</p>
   {% endif %}
 {% endblock %}

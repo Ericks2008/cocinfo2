@@ -1,121 +1,156 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<style>
-  .member-level {
-    display: none;
-  }
-  .expand-button::before {
-    content: '+';
-  }
-  .collapse-button::before {
-    content: '-';
-  }
-
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .block {
-    flex: 1 0 600px; /* Adjust the width as needed */
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-  }
-
-</style>
-
-
-<script>
-  function toggleMembers(clanId, levelId) {
-    var members = document.getElementById(clanId + '-' + levelId);
-    var button = document.getElementById(clanId + '-' + levelId + '-button');
-
-    if (members.style.display === 'none') {
-      members.style.display = 'block';
-      button.classList.remove('expand-button');
-      button.classList.add('collapse-button');
-    } else {
-      members.style.display = 'none';
-      button.classList.remove('collapse-button');
-      button.classList.add('expand-button');
-    }
-  }
-</script>
   {% if ClanWar %}
-  <div class="col-auto">
-    <h1>
-      <img height=50px width=50px src="{{ ClanWar['name']['badgeUrls']['small'] }}" alt=coc>
-      {% block title %}{{ ClanWar['name']['name'] }}{% endblock %}</h1>
-    <h2>{{ ClanWar['season'] }} / {{ ClanWar['state'] }}</h2>
-  </div>
-  {% endif %}
-
-  <ul class="nav nav-tabs fs-6">
+  {% set formatted_clantag = ClanWar['name']['tag'][1:] %}
+    <div class="d-flex align-items-center mb-3">
+      <a href="{{ url_for('claninfo', ClanTag=formatted_clantag) }}" class="text-decoration-none d-flex align-items-center">
+        <img src="{{ ClanWar['name']['badgeUrls']['small'] }}" alt="{{ ClanWar['name']['name'] }}" class="me-3" style="max-height: 60px;">
+        <h1>{% block title %}{{ ClanWar['name']['name'] }} (CWL Group){% endblock %}</h1></a>
+    </div>
+    <h2 class="mb-3">{{ ClanWar['season'] }} / {{ ClanWar['state'] }}</h2>
+ 
+  <ul class="nav nav-tabs fs-6 mb-4">
     <li class="nav-item">
-      <a class="nav-link" href="/clanwarleague?ClanTag={{ ClanWar['name']['tag'][1:] }}">League Group</a>
+        <a class="nav-link" href="{{ url_for('clanwarleague', ClanTag=formatted_clantag) }}">League Group</a>
     </li>
     {% for round in ClanWar['rounds'] %}
-    <li class="nav-item">
-      <a class="nav-link {% if round['warTags'][0] == '#0' %} disabled {% endif %} {% if loop.index0 == RoundDay %} active {% endif %}" href="/wartag?ClanTag={{ ClanWar['name']['tag'][1:] }}&Season={{ ClanWar['season'] }}&Day={{ loop.index }}">Round {{ loop.index }}</a>
-    </li>
+      <li class="nav-item">  
+        <a class="nav-link {% if round['warTags'][0] == '#0' %} disabled {% endif %} {% if loop.index0 == RoundDay %} active {% endif %}" 
+           href="{{ url_for('wartag', ClanTag=formatted_clantag, Season=ClanWar['season'], Day=loop.index) }}">Round {{ loop.index }}</a>
+      </li>
     {% endfor %}
     <li class="nav-item">
-        <a class="nav-link" href="/cwlteam?ClanTag={{ ClanWar['name']['tag'][1:] }}&Season={{ ClanWar['season'] }}">CWL Team</a>
+      <a class="nav-link" href="{{ url_for('cwlteam', ClanTag=formatted_clantag, Season=ClanWar['season']) }}">CWL Team</a>
     </li>
   </ul>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      Clan War League data is not available.
+    </div>
+  {% endif %}  
 
 {% endblock %}
 
 {% block content %}
   {% if ClanWar %}
-    <div class="container">
+    <div class="row row-cols-1 row-cols-md-1 row-cols-lg-1 g-1">
     {% for wartag in ClanWar['rounds'][RoundDay]['warTags'] %}
-      <div class="block">
-      <table class="table">
-      <tbody>
-      <tr><td>{% if ClanWar['rounds'][RoundDay][wartag]['state'] != 'warEnded' %}State : {{ ClanWar['rounds'][RoundDay][wartag]['state'] }}{% endif %}</td></tr>
-      <tr><td class="{% if ClanWar['rounds'][RoundDay][wartag]['state'] == 'warEnded' %}{% if ClanWar['rounds'][RoundDay][wartag]['result'] == 'win' %}table-success{% else %}table-danger{% endif %}{% endif %}" >
-        {{ ClanWar['rounds'][RoundDay][wartag]['clan']['name'] }}<br/>
-        {% if ClanWar['rounds'][RoundDay][wartag]['clan']['attacks'] %}
-        attacks : {{ ClanWar['rounds'][RoundDay][wartag]['clan']['attacks'] }}<br/>
-        stars : {{ ClanWar['rounds'][RoundDay][wartag]['clan']['stars'] }}<br/>
-        Percentage : {{ "%.1f"|format(ClanWar['rounds'][RoundDay][wartag]['clan']['destructionPercentage']) }}%
-        {% endif %}</td>
-        <td class="text-center">vs</td><td class="{% if ClanWar['rounds'][RoundDay][wartag]['state'] == 'warEnded' %}{% if ClanWar['rounds'][RoundDay][wartag]['result'] != 'win' %}table-success{% else %}table-danger{% endif %}{% endif %}" >
-          {{ ClanWar['rounds'][RoundDay][wartag]['opponent']['name'] }}<br/>
-          {% if ClanWar['rounds'][RoundDay][wartag]['opponent']['attacks'] %}
-          attacks : {{ ClanWar['rounds'][RoundDay][wartag]['opponent']['attacks'] }}<br/>
-          stars : {{ ClanWar['rounds'][RoundDay][wartag]['opponent']['stars'] }}<br/>
-          Percentage : {{ "%.1f"|format(ClanWar['rounds'][RoundDay][wartag]['opponent']['destructionPercentage']) }}%
-        {% endif %}</td><td></td></tr>
-      {% for member in ClanWar['rounds'][RoundDay][wartag]['clan']['members']  %}
-        <tr><td>{{ member['mapPosition'] }}.&nbsp;<img height=30px width=30px src="/static/1_{{ member['townhallLevel'] }}.png" alt="{{ member['townhallLevel'] }}">{{ member['name'] }}</td>
-        <td>{% if member['attacks'] %}
-          <img height=30px width=30px src="/static/1_{{ totalMemberList[member['attacks'][0]['defenderTag']]['townhallLevel'] }}.png"
-            alt="{{ totalMemberList[member['attacks'][0]['defenderTag']]['townhallLevel'] }}">
-          {{ totalMemberList[member['attacks'][0]['defenderTag']]['name'] }}<br/><small>
-          {% for j in range(0, member['attacks'][0]['stars']) %}&#x1f31f;{% endfor %}
-          &nbsp;/&nbsp;{{ "%.1f"|format(member['attacks'][0]['destructionPercentage']) }}%</small>
-          {% endif %}</td>
-        <td>{{ ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['mapPosition'] }}.&nbsp;
-          <img height=30px width=30px src="/static/1_{{ ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['townhallLevel'] }}.png"
-          alt="{{ ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['townhallLevel'] }}">
-          {{ ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['name'] }}</td>
-        <td>{% if ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'] %}
-          <img height=30px width=30px src="/static/1_{{ totalMemberList[ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'][0]['defenderTag']]['townhallLevel'] }}.png"
-          alt="{{ totalMemberList[ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'][0]['defenderTag']]['townhallLevel'] }}">
-          {{ totalMemberList[ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'][0]['defenderTag']]['name'] }}<br/><small>
-          {% for j in range(0, ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'][0]['stars']) %}&#x1f31f;{% endfor %}
-          &nbsp;/&nbsp;{{ "%.1f"|format(ClanWar['rounds'][RoundDay][wartag]['opponent']['members'][loop.index0]['attacks'][0]['destructionPercentage']) }}%</small>
-          {% endif %}</td></tr>
-      {% endfor %}
-      </tbody>
-      </table>
+      {% set war_data = ClanWar['rounds'][RoundDay][wartag] %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-header d-flex justify-content-between align-items-center">  
+            <div>
+              <h5 class="text-center mb-0">{{ war_data['clan']['name'] }} <small class="text-muted">{{ war_data['clan']['tag'] }}</small></h5>
+            </div>
+            <div class="fw-bold">
+              VS
+            </div>
+            <div>
+              <h5 class="text-center mb-0">{{ war_data['opponent']['name'] }}<small class="text-muted">{{ war_data['opponent']['tag'] }}</small></h5>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="row text-center mb-3">
+              <div class="col-5">
+                {% if war_data['state'] == 'warEnded' %}
+                  <span class="badge bg-{{ 'success' if war_data['result'] == 'win' else 'danger' }} fs-5">{{ 'Win' if war_data['result'] == 'win' else 'Lost' }}</span>
+                {% endif %}
+                <h6 class="mt-2 mb-0">{{ war_data['clan']['stars'] }} <i class="bi bi-star-fill text-warning"></i> / {{ "%.1f"|format(war_data['clan']['destructionPercentage']) }}%</h6> 
+                <small class="text-muted">{{ war_data['clan']['attacks'] or 0 }} attacks</small>
+              </div>
+              <div class="col-2 d-flex align-items-center justify-content-center">
+                <i class="bi bi-arrow-left-right fs-4 text-secondary"></i>
+              </div>
+              <div class="col-5">
+                {% if war_data['state'] == 'warEnded' %}
+                  <span class="badge bg-{{ 'success' if war_data['result'] != 'win' else 'danger' }} fs-5">{{ 'Win' if war_data['result'] != 'win' else 'Lost' }}</span>
+                {% endif %}
+                <h6 class="mt-2 mb-0">{{ war_data['opponent']['stars'] }} <i class="bi bi-star-fill text-warning"></i> / {{ "%.1f"|format(war_data['opponent']['destructionPercentage']) }}%</h6>
+                <small class="text-muted">{{ war_data['opponent']['attacks'] or 0 }} attacks</small>
+              </div>
+            </div>  
+
+            <hr>
+
+            {# Table for member details #}
+            <div class="table-responsive">
+              <table class="table table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th class="text-center">Clan Member</th>
+                    <th class="text-center">Attack Details</th>
+                    <th class="text-center">Opponent Member</th>
+                    <th class="text-center">Attack Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for member in war_data['clan']['members'] %}
+                    {% set opponent_member = war_data['opponent']['members'][loop.index0] %}
+                    <tr>
+                      <td>{{ member['mapPosition'] }}.
+                        <img height="20" width="20" src="{{ url_for('static', filename='1_' + member['townhallLevel']|string + '.png') }}"
+                             alt="TH{{ member['townhallLevel'] }}" class="me-1 rounded">
+                        <a href="{{ url_for('player', PlayerTag=member['tag'][1:]) }}" class="text-decoration-none">{{ member['name'] }}</a>
+                      </td>
+                      <td>
+                        {% if member['attacks'] %}
+                          {% set attack = member['attacks'][0] %}
+                          {% set defender_data = totalMemberList.get(attack['defenderTag']) %}
+                          {% if defender_data %}
+                            <img height="20" width="20" src="{{ url_for('static', filename='1_' + defender_data['townhallLevel']|string + '.png') }}"
+                                 alt="TH{{ defender_data['townhallLevel'] }}" class="me-1 rounded">
+                            <a href="{{ url_for('player', PlayerTag=defender_data['tag'][1:]) }}" class="text-decoration-none">{{ defender_data['name'] }}</a>
+                            <br>
+                            <small>{% for j in range(attack['stars']) %}<i class="bi bi-star-fill text-warning"></i>{% endfor %}
+                                &nbsp;/&nbsp;{{ "%.1f"|format(attack['destructionPercentage']) }}%
+                            </small>
+                          {% else %}
+                            <small class="text-muted"> / </small>
+                          {% endif %}
+                        {% else %}
+                          <small class="text-muted"> / </small>
+                        {% endif %}
+                      </td>
+                      <td>{{ opponent_member['mapPosition'] }}.
+                        <img height="20" width="20" src="{{ url_for('static', filename='1_' + opponent_member['townhallLevel']|string + '.png') }}"
+                             alt="TH{{ opponent_member['townhallLevel'] }}" class="me-1 rounded">
+                        <a href="{{ url_for('player', PlayerTag=opponent_member['tag'][1:]) }}" class="text-decoration-none">{{ opponent_member['name'] }}</a>
+                      </td>
+                      <td>
+                        {% if opponent_member['attacks'] %}
+                          {% set attack = opponent_member['attacks'][0] %}
+                          {% set defender_data = totalMemberList.get(attack['defenderTag']) %}
+                          {% if defender_data %}
+                            <img height="20" width="20" src="{{ url_for('static', filename='1_' + defender_data['townhallLevel']|string + '.png') }}"
+                                         alt="TH{{ defender_data['townhallLevel'] }}" class="me-1 rounded">
+                            <a href="{{ url_for('player', PlayerTag=defender_data['tag'][1:]) }}" class="text-decoration-none">{{ defender_data['name'] }}</a>
+                            <br>                  
+                            <small>{% for j in range(attack['stars']) %}<i class="bi bi-star-fill text-warning"></i>{% endfor %}
+                                &nbsp;/&nbsp;{{ "%.1f"|format(attack['destructionPercentage']) }}%
+                            </small>
+                          {% else %}
+                            <small class="text-muted"> / </small>
+                          {% endif %}
+                        {% else %}
+                          <small class="text-muted"> / </small>
+                        {% endif %}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
-    {% endfor %}
+    {% endfor %}    
     </div>
-
+  {% else %}  
+    <div class="alert alert-info text-center" role="alert">
+      Clan War League group data is unavailable
+    </div>
   {% endif %}
-
+  {# dumpdata | safe #}
 {% endblock %}
