@@ -1,0 +1,214 @@
+<style>
+/***********************************/
+/* clantroops.html specific styles */
+/***********************************/
+.troop-table-container {
+    max-height: 90vh; /* Adjust as needed */
+    overflow: auto; /* Handles both horizontal and vertical scrolling */
+    border: 1px solid var(--bs-border-color); /* Optional: add a border around the scrollable area */
+    border-radius: var(--bs-border-radius); /* Optional: rounded corners */
+}
+
+.troop-levels-table {
+    width: 100%; /* Ensure table takes full width of its container */
+    border-collapse: separate; 
+    border-spacing: 0;
+    max-height: 90vh;
+}
+<!--     table-layout: fixed; /* Helps with column width consistency */ -->
+
+.troop-levels-table th,
+.troop-levels-table td {
+    padding: 0.5rem; /* Adjust padding for cell content */
+    white-space: nowrap; /* Prevent content from wrapping */
+    text-align: center;
+}
+
+/* Sticky Headers (Top Row) */
+.troop-levels-table thead th.sticky-header {
+    position: sticky;
+    top: 0;
+    background-color: var(--bs-table-bg, #fff); /* Ensure background is solid */
+    z-index: 2; /* Ensures it's above scrolling content */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Sticky Columns (TH and Member Name) */
+.troop-levels-table th.sticky-th-col,
+.troop-levels-table th.sticky-name-col,
+.troop-levels-table th.sticky-th-col-row,
+.troop-levels-table th.sticky-name-col-row {
+    position: sticky;
+    background-color: var(--bs-table-bg, #fff);
+    z-index: 1; /* Below top sticky header, above scrolling content */
+}
+
+/* Corner Cell (TH header) */
+.troop-levels-table th.sticky-th-col {
+    left: 0;
+    z-index: 3; /* Highest z-index for the top-left corner cell */
+}
+
+/* Sticky Member Name header */
+.troop-levels-table th.sticky-name-col {
+    z-index: 3;
+}
+
+/* Sticky TH Level per row */
+.troop-levels-table th.sticky-th-col-row {
+    left: 0;
+    z-index: 1; /* Below top sticky, but above horizontal scrolling data */
+}
+
+/* Sticky Member Name per row */
+.troop-levels-table th.sticky-name-col-row {
+    z-index: 1;
+}
+
+/* Optional: Styling for small images to ensure consistent size */
+.troop-levels-table img {
+    height: 30px;
+    width: 30px;
+    object-fit: contain; /* Ensures image scales without distortion */
+}
+
+
+.sticky-header {
+    position: sticky;
+    top: 0; /* Stays at the top of the scrolling container */
+    background-color: var(--bs-table-bg, #fff); /* Match table background or use a specific color */
+    /* You might need to adjust this depending on your theme */
+    z-index: 10; /* Ensures it stays above other content */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
+}
+
+/* For the first column (player names) to be sticky vertically and horizontally */
+.sticky-header[style*="left: 0"] {
+    left: 0;
+    z-index: 11; /* Higher z-index for the corner cell and the first column */
+    /* Add a background color for the first column if it's transparent */
+    background-color: var(--bs-table-bg, #fff);
+}
+
+/**************************************/
+/* clanwarleague.html specific styles */
+/**************************************/
+/* If using Bootstrap Icons for the collapse button */
+.collapse-icon {
+  transition: transform 0.3s ease-in-out; /* Smooth rotation */
+}
+
+/* Rotate icon when parent collapse is 'show' (expanded) */
+.btn[aria-expanded="true"] .collapse-icon {
+  transform: rotate(90deg); /* Or 180deg if pointing down when collapsed */
+}
+
+/* General improvements from other templates */
+.d-flex.align-items-center img {
+    max-height: 60px; /* Ensure clan badge size is consistent */
+}
+.card .list-group-item button[aria-expanded="true"] .collapse-icon {
+    transform: rotate(90deg);
+}
+
+/*************************************/
+/* Player.html Table Specific Styles */
+/*************************************/
+
+/* This div is the actual scrolling container */
+.table-scroll-container {
+    max-height: 90vh; /* Adjust as needed. Leave room for header/footer. */
+    overflow: auto; /* Enables both vertical and horizontal scrolling */
+    border: 1px solid var(--bs-border-color); /* Optional border */
+    border-radius: var(--bs-border-radius); /* Optional rounded corners */
+}
+
+/* Ensure the table itself takes full width of its container and doesn't collapse */
+.player-progress-table {
+    width: 100%;
+    /* table-layout: fixed; is often problematic for sticky columns unless all widths are explicitly set.
+       It's usually better to let the browser determine column widths based on content (auto layout).
+       If you use fixed, you MUST set widths for all columns. */
+    border-collapse: separate; /* Crucial for sticky cells to work correctly with borders */
+    border-spacing: 0; /* Ensures no gaps between cells due to border-collapse: separate */
+}
+
+/* Base sticky styles for all sticky headers/cells */
+.sticky-header,
+.sticky-column-left {
+    position: sticky;
+    background-color: var(--bs-table-bg, #fff); /* Ensure solid background */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1); /* Subtle shadow for visual lift */
+    z-index: 10; /* Default z-index for sticky elements, above normal content */
+}
+
+/* TOP ROW STICKY */
+.sticky-header {
+    top: 0; /* Sticks to the top of the scrolling container */
+    z-index: 11; /* Higher than sticky columns so it overlaps them */
+}
+
+/* LEFT COLUMN STICKY */
+.sticky-column-left {
+    left: 0; /* Sticks to the left of the scrolling container */
+    z-index: 10; /* Lower than sticky header, but higher than normal cells */
+}
+
+/* player.html first column extra control */
+.player-column-left {
+    /* --- New/Modified CSS for First Column Width Control --- */
+    max-width: 120px; /* Adjust this value as needed for mobile/desktop */
+    min-width: 80px; /* Prevent it from becoming too small */
+    overflow: hidden; /* Hide content that exceeds the width */
+    text-overflow: ellipsis; /* Display '...' for hidden text */
+    white-space: nowrap; /* Keep content on a single line */
+
+}
+
+/* TOP-LEFT CORNER CELL (Both sticky top and sticky left) */
+.sticky-corner {
+    top: 0;
+    left: 0;
+    z-index: 12; /* Highest z-index to appear above both sticky rows and columns */
+}
+
+/* Ensure text-nowrap works and prevents wrapping */
+.text-nowrap {
+    white-space: nowrap;
+}
+
+/* Optional: Adjust padding for table cells if needed */
+.player-progress-table th,
+.player-progress-table td {
+    padding: 0.5rem; /* Adjust padding for cell content */
+    vertical-align: middle; /* Align content vertically */
+}
+
+/*****************************************/
+/* clanwarlog.html Table Specific Styles */
+/*****************************************/
+
+
+/* Applying border-spacing to a specific class to avoid affecting all tables */
+.war-log-table {
+  border-collapse: separate;
+  border-spacing: 0 10px; /* Adds space between rows */
+}
+/* Add a border to the individual cells to show separation while maintaining row spacing */
+.war-log-table th, .war-log-table td {
+    border-top: 1px solid #dee2e6; /* Bootstrap's default table border color */
+    border-bottom: 1px solid #dee2e6;
+    /* Optional: add left/right border for cell separation */
+    /* border-left: 1px solid #dee2e6; */
+    /* border-right: 1px solid #dee2e6; */
+}
+.war-log-table tr:first-child th,
+.war-log-table tr:first-child td {
+    border-top: none; /* No top border for the first row to prevent double border */
+}
+.war-log-table tr:last-child th,
+.war-log-table tr:last-child td {
+    border-bottom: none; /* No bottom border for the last row */
+}
+ 
+</style>
