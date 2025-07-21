@@ -6,19 +6,19 @@
     {% set formatted_clantag = main_clan['tag'][1:] %}
 
     <div class="d-flex align-items-center mb-3">
-      <a href="{{ url_for('claninfo', ClanTag=formatted_clantag) }}" class="text-decoration-none d-flex align-items-center">
+      <a href="{{ url_for('clan_bp.get_clan_details', clan_tag=formatted_clantag) }}" class="text-decoration-none d-flex align-items-center">
         <img src="{{ main_clan['badgeUrls']['small'] }}" alt="{{ main_clan['name'] }} badge"
              class="me-3" style="max-height: 60px">
         <h1>{% block title %}{{ ClanWarLog['items'][0]['clan']['name'] }} War Log{% endblock %}</h1></a>
     </div>
 
     <div class="d-flex flex-wrap gap-2 mb-3">
-      <a href="{{ url_for('currentwar', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Clan War</a>
-      <a href="{{ url_for('clanwarlog', ClanTag=formatted_clantag) }}" class="btn btn-primary btn-sm active" aria-current="page">War Log</a>
-      <a href="{{ url_for('clanprogress', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Clan Progress</a>
-      <a href="{{ url_for('supertroops', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Super Troops</a>
-      <a href="{{ url_for('clanwarleague', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">CWL (local)</a>
-      <a href="{{ url_for('clantroops', ClanTag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Troops</a>
+      <a href="{{ url_for('clan_bp.display_currentwar', clan_tag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Clan War</a>
+      <a href="{{ url_for('clan_bp.display_war_log', clan_tag=formatted_clantag) }}" class="btn btn-primary btn-sm active" aria-current="page">War Log</a>
+      <a href="{{ url_for('clan_bp.display_clan_progress', clan_tag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Clan Progress</a>
+      <a href="{{ url_for('clan_bp.supertroops', clan_tag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Super Troops</a>
+      <a href="{{ url_for('cwl_bp.display_cwl_info', clan_tag=formatted_clantag) }}" class="btn btn-secondary btn-sm">CWL (local)</a>
+      <a href="{{ url_for('clan_bp.display_clan_troops', clan_tag=formatted_clantag) }}" class="btn btn-secondary btn-sm">Troops</a>
 
       <a href="https://www.clashofstats.com/clans/{{ formatted_clantag }}/history/past-members" class="btn btn-outline-info btn-sm"
         target="_blank" rel="noopener noreferrer">Past Members<i class="bi bi-box-arrow-up-right ms-1"></i></a>
@@ -57,7 +57,7 @@
             {% if ClanWar['opponent'] %}
               <tr class="{% if ClanWar['result'] == 'win' %}table-success{% elif ClanWar['result'] == "lose" %}table-danger{% endif %}">
                 <td>
-                  <a href="{{ url_for('wardetail', ClanTag=formatted_clantag, Date=ClanWar['endTime'][:8]) }}" class="text-decoration-none text-body">
+                  <a href="{{ url_for('clan_bp.display_wardetail', clan_tag=formatted_clantag, war_date=ClanWar['endTime'][:8]) }}" class="text-decoration-none text-body">
                     <span>{{ ClanWar['endTime'][6:8] }}/{{ ClanWar['endTime'][4:6] }}</span>
                     <span>{{ ClanWar['endTime'][9:11] }}:{{ ClanWar['endTime'][11:13] }}</span>
                   </a>
@@ -108,13 +108,14 @@
           </tr>
         </thead>
         <tbody>
-          {% for membertag, member_data in ClanWarLog['clan'].items() %}
+          {% for tag, membertag in ClanWarLog['mapPositionSeq'].items() %}
+          {% set member_data = ClanWarLog['clan'][membertag] %}
           <tr>
             <td class="text-start text-nowrap sticky-column-left">
               {{ "%.1f"|format(member_data['mapPositionAvg']) }}<br/>
               <img src="{{ url_for('static', filename='1_' + member_data['townhallLevel']|string + '.png') }}"
                    alt="TH{{ member_data['townhallLevel'] }}" class="me-1" height=30px width=30px>
-              {# <a href="{{ url_for('player', PlayerTag=member_data['tag'][1:]) }}" 
+              {# <a href="{{ url_for('player_bp.display_player_info', player_tag=member_data['tag'][1:]) }}" 
                   class="text-decoration-none text-body"> #} {{ member_data['name'] }} {# </a> #}
             </td>
             {% for ClanWar in ClanWarLog['print'] %}

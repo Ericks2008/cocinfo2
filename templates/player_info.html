@@ -1,8 +1,10 @@
+{# templates/player_info.html #}
+
 {% extends 'base.html' %}
 
 {% block header %}
   {% if PlayerData %}
-  {% set formatted_playertag = PlayerData['tag'][1:] %}
+    {% set formatted_playertag = PlayerData['tag'][1:] %}
 
     <div class="d-flex align-items-center mb-3">
       <img src="{{ url_for('static', filename='1_' + PlayerData["townHallLevel"]|string + '.png') }}" 
@@ -12,10 +14,10 @@
 
     {# Buttons Group #}
     <div class="d-flex flex-wrap gap-2 mb-3">
-      <a href="{{ url_for('player_bp.display_player_info', player_tag=formatted_playertag, DateRange=90) }}" 
-        class="btn btn-primary btn-sm">90 Days</a>
+      <a href="{{ url_for('player_bp.display_player_info', player_tag=formatted_playertag) }}" 
+          class="btn btn-primary btn-sm">90 Days</a>
       <a href="{{ url_for('player_bp.display_player_progress', player_tag=formatted_playertag) }}" 
-        class="btn btn-secondary btn-sm">Upgrade Progress</a>
+          class="btn btn-secondary btn-sm">Upgrade Progress</a>
       <a href="https://www.clashofstats.com/players/{{ formatted_playertag }}/history/log" class="btn btn-outline-info btn-sm"
         target="_blank" rel="noopener noreferrer">History Log<i class="bi bi-box-arrow-up-right ms-1"></i></a>
     </div>
@@ -23,8 +25,9 @@
     {# Date Picker Form #}
     <div class="row mb-4 align-items-center">
       <div class="col-auto">
-        <form action="" method='POST' name="myform" class="d-flex align-items-center">
-          {{ form.csrf_token }}
+        <form action="{{ url_for('player_bp.display_player_info', player_tag=formatted_playertag) }}" 
+            method='GET' name="myform" class="d-flex align-items-center">
+          {# form.csrf_token #}
           <label for="playerdate" class="me-2 mb-0 fs-6">Select Date:</label>
           {{ form.playerdate(class='datepicker form-control form-control-sm me-2', id='playerdate') }}
           {{ form.submit(class="btn btn-primary btn-sm") }}

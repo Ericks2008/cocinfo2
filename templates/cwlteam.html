@@ -4,24 +4,24 @@
   {% if ClanWar %}
   {% set formatted_clantag = ClanWar['name']['tag'][1:] %}
     <div class="d-flex align-items-center mb-3">
-      <a href="{{ url_for('claninfo', ClanTag=formatted_clantag) }}" class="text-decoration-none d-flex align-items-center">
+      <a href="{{ url_for('clan_bp.get_clan_details', clan_tag=formatted_clantag) }}" class="text-decoration-none d-flex align-items-center">
         <img src="{{ ClanWar['name']['badgeUrls']['small'] }}" alt="{{ ClanWar['name']['name'] }}" class="me-3" style="max-height: 60px;">
-    <h1>{% block title %}{{ ClanWar['name']['name'] }} CWL Group{% endblock %}</h1></a>
+        <h1>{% block title %}{% if ClanWar %}{{ ClanWar['name']['name'] }}{% endif %} CWL Group{% endblock %}</h1></a>
     </div>
     <h2 class="mb-3">{{ ClanWar['season'] }} / {{ ClanWar['state'] }}</h2>
     
     <ul class="nav nav-tabs fs-6 mb-4">
       <li class="nav-item">
-    <a class="nav-link" href="{{ url_for('clanwarleague', ClanTag=formatted_clantag) }}">League Group</a>
+    <a class="nav-link" href="{{ url_for('cwl_bp.display_cwl_info', clan_tag=formatted_clantag, season=ClanWar['season']) }}">League Group</a>
       </li>
       {% for round in ClanWar['rounds'] %}
         <li class="nav-item">
           <a class="nav-link {% if round['warTags'][0] == '#0' %} disabled {% endif %}" 
-             href="{{ url_for('wartag', ClanTag=formatted_clantag, Season=ClanWar['season'], Day=loop.index) }}">Round {{ loop.index }}</a>
+             href="{{ url_for('cwl_bp.wartag', clan_tag=formatted_clantag, season=ClanWar['season'], round_day=loop.index) }}">Round {{ loop.index }}</a>
         </li>
       {% endfor %}
       <li class="nav-item">
-    <a class="nav-link active" href="{{ url_for('cwlteam', ClanTag=formatted_clantag, Season=ClanWar['season']) }}">CWL Team</a>
+    <a class="nav-link active" href="{{ url_for('cwl_bp.cwlsummary', clan_tag=formatted_clantag, season=ClanWar['season']) }}">Summary</a>
       </li>
     </ul>
   {% else %}
@@ -58,23 +58,28 @@
                     <td>
                       <img src="{{ url_for('static', filename='1_' + member['townHallLevel']|string + '.png') }}"
                            alt="TH{{member['townHallLevel'] }}" class="me-1 rounded" style="max-height: 40px">
-                      <a href="{{ url_for('player', PlayerTag=membertag[1:]) }}" class="text-decoration-none">{{ member['name'] }}</a>
+                      <a href="{{ url_for('player_bp.display_player_info', player_tag=membertag[1:]) }}" 
+                          class="text-decoration-none">{{ member['name'] }}</a>
                     </td>
                     {% for i in range(1, ClanWar['rounds']|length + 1) %}
                       <td class="text-center">
                         {% set attack_data = member['attack'].get(i|string) %}
-                        {% if attack_data and 'attacks' in attack_data and attack_data['attacks'] %}
-                          {% set attack = attack_data['attacks'][0] %}
-                          <span class="d-block text-nowrap">
-                            <i class="bi bi-crosshair me-1"></i>
-                            {{ attack_data['mapPosition'] }}
-                          </span>
-                          <span class="d-block text-nowrap">
-                            {% for j in range(attack['stars']) %}<i class="bi bi-star-fill text-warning"></i>{% endfor %}
-                            {{ "%.1f"|format(attack['destructionPercentage']) }}%
-                          </span>
-                        {% else %}
-                          <span class="text-muted"> / </span>
+                        {% if attack_data and 'tag' in attack_data %}
+                          {% if attack_data['attacks'] %}
+                            {% set attack = attack_data['attacks'][0] %}
+                            <span class="d-block text-nowrap">
+                              <i class="bi bi-crosshair me-1"></i>
+                              {{ attack_data['mapPosition'] }}
+                            </span>
+                            <span class="d-block text-nowrap">
+                              {% for j in range(attack['stars']) %}<i class="bi bi-star-fill text-warning"></i>{% endfor %}
+                              {{ "%.1f"|format(attack['destructionPercentage']) }}%
+                            </span>
+                          {% else %}
+                            <span class="text-muted"> / </span>
+                          {% endif %}
+                        {% else %}  
+                          <span class='text-muted'></span>
                         {% endif %}
                       </td>
                     {% endfor %}
@@ -114,7 +119,8 @@
               {% set member_summary = clansummary['memberlist'][membertag] %}
               <tr>
                 <td>
-                  <a href="{{ url_for('player', PlayerTag=membertag[1:]) }}" class="text-decoration-none">{{ member_summary['name'] }}</a>
+                  <a href="{{ url_for('player_bp.display_player_info', player_tag=membertag[1:]) }}" 
+                      class="text-decoration-none">{{ member_summary['name'] }}</a>
                 </td>
                 <td class="text-center">{{ member_summary.get('attackcount', 0) }}</td>
                 <td class="text-center">{{ member_summary.get('totalstar', 0) }}</td>

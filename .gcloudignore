@@ -26,6 +26,7 @@ __pycache__/
 .vscode/           # VS Code
 *.sublime-project
 *.sublime-workspace
+*.swp              # macvim working file ? 
 
 # Local database files (e.g., SQLite)
 *.sqlite3
@@ -68,3 +69,6 @@ app_dev.yaml       # If you have a separate local dev config file
 # Jupyter notebooks or interactive session files
 .ipynb_checkpoints/
 *.ipynb
+
+# mac file
+.DS_Store
