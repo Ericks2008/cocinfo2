@@ -1,9 +1,9 @@
 
-#ClanTagList = ['8VPLQR2J', 'YV0CYP29', 'Y2CP999Y', 'LYVC8G9U', 'PCV2PV8C', 'LU2VVLCQ']
-ClanTagList = ['8VPLQR2J', 'YV0CYP29', 'Y2CP999Y', 'LYVC8G9U', 'PCV2PV8C', '9CLQ9P8R']
+cocparm = {
 
-heroeslist = ['Barbarian King', 'Archer Queen', 'Grand Warden', 'Royal Champion', 'Minion Prince']
-troopsdetail = {
+'heroeslist': ['Barbarian King', 'Archer Queen', 'Grand Warden', 'Royal Champion', 'Minion Prince'],
+
+'troopsdetail': {
     'Barbarian King' : {
     17 : {'max' : 100, 'min' : 95},
     16 : {'max' : 95, 'min' : 90},
@@ -609,8 +609,9 @@ troopsdetail = {
     17 : {'max' : 5, 'min' : 4},
     16 : {'max' : 4, 'min' : 3}, 15 : {'max' : 3, 'min' : 2}, 14 : {'max' : 2, 'min' : 0}
     }
-}
-icon = {
+},
+
+'icon': {
     'Barbarian King' : 'BarbarianKing.webp',
     'Archer Queen' : 'ArcherQueen.webp',
     'Grand Warden' : 'GrandWarden.webp',
@@ -714,9 +715,9 @@ icon = {
     'Revive Spell' : 'ReviveSpell.png',
     'Overgrowth Spell' : 'OvergrowthSpell.webp',
     'Ice Block Spell' : 'IceBlockSpell.webp'
-}
+},
 
-heroequipmentslist = [
+'heroequipmentslist': [
     'Giant Gauntlet', 'Barbarian Puppet', 'Rage Vial', 'Vampstache', 'Earthquake Boots', 'Spiky Ball',
     'Snake Bracelet',
     'Archer Puppet', 'Frozen Arrow', 'Invisibility Vial', 'Healer Puppet', 'Giant Arrow', 'Magic Mirror',
@@ -724,22 +725,28 @@ heroequipmentslist = [
     'Eternal Tome', 'Life Gem', 'Rage Gem', 'Healing Tome', 'Fireball', 'Lavaloon Puppet',
     'Seeking Shield', 'Royal Gem', 'Haste Vial', 'Hog Rider Puppet', 'Rocket Spear', 'Electro Boots',
     'Henchmen Puppet', 'Dark Orb', 'Metal Pants', 'Noble Iron', 'Dark Crown'
-    ]
+    ],
 
-petslist = ['L.A.S.S.I', 'Electro Owl', 'Mighty Yak', 'Unicorn', 'Frosty', 'Diggy',
-    'Poison Lizard', 'Phoenix', 'Spirit Fox', 'Angry Jelly', 'Sneezy']
-siegemachinelist = [
+'petslist': ['L.A.S.S.I', 'Electro Owl', 'Mighty Yak', 'Unicorn', 'Frosty', 'Diggy',
+    'Poison Lizard', 'Phoenix', 'Spirit Fox', 'Angry Jelly', 'Sneezy'],
+
+'siegemachinelist': [
     'Wall Wrecker', 'Battle Blimp', 'Stone Slammer', 'Siege Barracks', 'Log Launcher',
-    'Flame Flinger', 'Battle Drill', 'Troop Launcher']
-troopslist = [
+    'Flame Flinger', 'Battle Drill', 'Troop Launcher'],
+
+'troopslist': [
     'Barbarian', 'Archer', 'Goblin', 'Giant', 'Wall Breaker', 'Balloon', 'Wizard',
     'Healer', 'Dragon', 'P.E.K.K.A', 'Baby Dragon', 'Miner', 'Yeti', 'Electro Dragon',
-    'Dragon Rider', 'Electro Titan', 'Root Rider', 'Thrower']
-darktroopslist = [
+    'Dragon Rider', 'Electro Titan', 'Root Rider', 'Thrower'],
+
+'darktroopslist': [
     'Minion', 'Hog Rider', 'Valkyrie', 'Golem', 'Witch', 'Lava Hound', 'Bowler', 'Ice Golem',
-    'Headhunter', 'Apprentice Warden', 'Druid', 'Furnace']
-spellslist = [
+    'Headhunter', 'Apprentice Warden', 'Druid', 'Furnace'],
+
+'spellslist': [
     'Lightning Spell', 'Healing Spell', 'Rage Spell', 'Jump Spell', 'Freeze Spell', 'Clone Spell',
     'Invisibility Spell', 'Recall Spell', 'Revive Spell',
     'Poison Spell', 'Earthquake Spell', 'Haste Spell',  'Skeleton Spell',
     'Bat Spell', 'Overgrowth Spell', 'Ice Block Spell']
+
+}

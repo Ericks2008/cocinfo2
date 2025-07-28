@@ -31,6 +31,8 @@ app.app_logger = app_logger
 # Load secrets
 app.secret_key = get_secret_from_secret_manager_auto('app_secret_key')
 coc_data_service_url = get_secret_from_secret_manager_auto('coc_data_service_url')
+app.cocinfo_cocparm = cocparm.cocparm
+app.cocinfo_cocparm['cocinfo_clan_list'] = json.loads(get_secret_from_secret_manager_auto('cocinfo_clan_list'))
 
 # Initialize API Client (make it available globally or pass to blueprints)
 # A more robust solution might use Flask's application context or extensions
@@ -55,4 +57,5 @@ def format_coc_time_filter(iso_string):
         return 'N/A'
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='127.0.0.1', port=8080, debug=True, passthrough_errors=True,
+    use_debugger=False, use_reloader=False)

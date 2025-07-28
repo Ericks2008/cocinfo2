@@ -3,7 +3,6 @@ import urllib.parse
 import copy
 import json
 import traceback
-import cocparm # Assuming cocparm is accessible or passed
 from utils.helper import get_level_badge_class
 
 clan_bp = Blueprint('clan_bp', __name__)
@@ -11,7 +10,8 @@ clan_bp = Blueprint('clan_bp', __name__)
 @clan_bp.route('/clan')
 def clan():
     current_app.app_logger.info("Received clan info request")
-    ClanTagList = cocparm.ClanTagList 
+    ClanTagList = current_app.cocinfo_cocparm['cocinfo_clan_list']
+
     cocdata = []
     for ClanTag in ClanTagList:
         try:
@@ -23,19 +23,22 @@ def clan():
         except Exception as e:
             current_app.app_logger.error(f"Error fetching CWL list for {ClanTag}: {e}")
             flash(f"Failed to load data for clan {ClanTag}. Please try again later.", "error")
-    return render_template('clan.html', ThisHTML="clan", ClanData=cocdata)
+    return render_template('clan.html', ThisHTML="clan", ClanData=cocdata, 
+                           cocparm=current_app.cocinfo_cocparm)
 
 @clan_bp.route('/clan/<string:clan_tag>/info')
 def get_clan_details(clan_tag:None):
     # get_clan_details replace claninfo
     data = current_app.coc_api_client.get_clan_details(clan_tag)
-    return render_template('claninfo.html', ClanNameTag=clan_tag, ClanData=data, ThisHTML="clan")
+    return render_template('claninfo.html', ClanNameTag=clan_tag, ClanData=data, ThisHTML="clan",
+                           cocparm=current_app.cocinfo_cocparm,)
 
 
 @clan_bp.route('/clan/<clan_tag>/supertroops', methods=['GET'])
 def supertroops(clan_tag):
     data = current_app.coc_api_client.get_clan_supertroops(clan_tag)
-    return render_template('supertroops.html', ThisHTML='supertroops', ClanData=data)
+    return render_template('supertroops.html', ThisHTML='supertroops', ClanData=data,
+                           cocparm=current_app.cocinfo_cocparm,)
 
 
 @clan_bp.route('/clan/<clan_tag>/troops', methods=['GET'])
@@ -58,16 +61,8 @@ def display_clan_troops(clan_tag):
         ClanNameTag=clan_tag,
         ClanData=clan_data,
         ThisHTML="clan",
-        heroeslist=cocparm.heroeslist,
-        heroequipmentslist=cocparm.heroequipmentslist,
-        petslist=cocparm.petslist,
-        siegemachinelist=cocparm.siegemachinelist,
-        troopslist=cocparm.troopslist,
-        darktroopslist=cocparm.darktroopslist,
-        spellslist=cocparm.spellslist,
-        icon=cocparm.icon,
-        troopsdetail=cocparm.troopsdetail,
-        get_level_badge_class=get_level_badge_class
+        get_level_badge_class=get_level_badge_class,
+        cocparm=current_app.cocinfo_cocparm
     )
 
 @clan_bp.route('/clan/<clan_tag>/progress', methods=['GET'])    
@@ -87,7 +82,8 @@ def display_clan_progress(clan_tag):
         current_app.logger.error(f"Error calling clan troops API for {clan_tag}: {e}")
         flash("An unexpected error occurred while fetching clan troops data. Please try again later.", 'danger')
         clan_data = None
-    return render_template('clanprogress.html', ThitHTML='clanprogress', ClanData=clan_data)
+    return render_template('clanprogress.html', ThitHTML='clanprogress', ClanData=clan_data,
+                           cocparm=current_app.cocinfo_cocparm)
 
 
 @clan_bp.route('/clan/currentwar/<clan_tag>', methods=['GET'])
@@ -127,7 +123,9 @@ def display_currentwar(clan_tag: str):
         war_data = None
     
     dumpdata = json.dumps(clan_war_team, indent=4).replace("\n", "<br>")    
-    return render_template('currentwar.html', ThisHTML="currentwar", ClanWar=war_data, ClanWarTeam=clan_war_team, dumpdata=dumpdata)
+    return render_template('currentwar.html', ThisHTML="currentwar", ClanWar=war_data, 
+                           ClanWarTeam=clan_war_team, dumpdata=dumpdata, 
+                           cocparm=current_app.cocinfo_cocparm)
 
 @clan_bp.route('/clan/warlog/<clan_tag>', methods=['GET'])
 def display_war_log(clan_tag: str):
@@ -178,7 +176,9 @@ def display_war_log(clan_tag: str):
                 war_log_data['clan'][member['tag']]['townhallLevel'] = member['townHallLevel']
                 war_log_data['clan'][member['tag']]['name'] = member['name']
     dumpdata = json.dumps(war_log_data, indent=4).replace("\n", "<br>").replace(" ", "&nbsp;")   
-    return render_template('clanwarlog.html', ThisHTML="clanwarlog", ClanWarLog=war_log_data, dumpdata=dumpdata)
+    return render_template('clanwarlog.html', ThisHTML="clanwarlog", ClanWarLog=war_log_data, 
+                           cocparm=current_app.cocinfo_cocparm,
+                           dumpdata=dumpdata)
 
 
 
@@ -209,7 +209,9 @@ def display_wardetail(clan_tag: str, war_date: str):
         war_data = None
 
     dumpdata = json.dumps(clan_war_team, indent=4).replace("\n", "<br>").replace(" ", "&nbsp;")
-    return render_template('currentwar.html', ThisHTML="currentwar", ClanWar=war_data, ClanWarTeam=clan_war_team, dumpdata=dumpdata)
+    return render_template('currentwar.html', ThisHTML="currentwar", ClanWar=war_data, 
+                           ClanWarTeam=clan_war_team, dumpdata=dumpdata,
+                           cocparm=current_app.cocinfo_cocparm)
 
 
 

@@ -9,12 +9,10 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Clan</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ url_for('clan_bp.get_clan_details', clan_tag='8VPLQR2J') }}">&#x7D55;&#x5730;&#x9006;&#x8972;</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('clan_bp.get_clan_details', clan_tag='YV0CYP29') }}">&#x7D55;&#x5730;&#x9006;&#x8972;&nbsp;2&#x76DF;</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('clan_bp.get_clan_details', clan_tag='Y2CP999Y') }}">&#x7D55;&#x5730;&#x9006;&#x8972;&nbsp;3&#x76DF;</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('clan_bp.get_clan_details', clan_tag='LYVC8G9U') }}">&#x7D55;&#x5730;&#x9006;&#x8972;&nbsp;4&#x76DF;</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('clan_bp.get_clan_details', clan_tag='PCV2PV8C') }}">WIN</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('clan_bp.get_clan_details', clan_tag='9CLQ9P8R') }}">&#23798;&#23996;&#22825;&#20809;</a></li>
+            {% set clan_list = cocparm['cocinfo_clan_list'] %}
+            {% for clan_tag, clan_name in clan_list.items() %}
+              <li><a class="dropdown-item" href="{{ url_for('clan_bp.get_clan_details', clan_tag=clan_tag) }}">{{ clan_name }}</a></li>
+            {% endfor %}
           </ul>
         </li>
         <li class="nav-item">

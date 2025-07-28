@@ -3,7 +3,6 @@ from flask import Blueprint, render_template, request, current_app, flash
 import urllib.parse
 import json
 import copy
-import cocparm # Assuming cocparm is accessible or passed
 from utils.helper import get_level_badge_class
 
 cwl_bp = Blueprint('cwl_bp', __name__)
@@ -40,7 +39,8 @@ def display_cwl_info(clan_tag, season:None):
         for round_detail in cwl_data['rounds']:
             round_detail['day'] = round
             round = round + 1
-    return render_template('clanwarleague.html', ThisHTML="clanwarleague", ClanWar=cwl_data)
+    return render_template('clanwarleague.html', ThisHTML="clanwarleague", ClanWar=cwl_data,
+                           cocparm=current_app.cocinfo_cocparm)
 
 
 
@@ -88,7 +88,8 @@ def wartag(clan_tag, season, round_day):
                     war_tag_data['result'] = 'lost'
         dumpdata = json.dumps(cwl_data, indent=4).replace("\n", "<br>").replace(" ", "&nbsp;")   
     return render_template('wartag.html', ThisHTML='clanwarleague', ClanWar=cwl_data, RoundDay=round_index, 
-                           totalMemberList=total_member_list, dumpdata=dumpdata)
+                           totalMemberList=total_member_list, dumpdata=dumpdata,
+                           cocparm=current_app.cocinfo_cocparm)
 
 @cwl_bp.route('/cwlsummary/<clan_tag>/<season>', methods=['GET'])
 def cwlsummary(clan_tag: str, season: str):
@@ -99,10 +100,13 @@ def cwlsummary(clan_tag: str, season: str):
         clansummary = cwl_summary_data['clansummary']
         dumpdata = json.dumps(clanlist, indent=4).replace("\n", "<br>").replace(" ", "&nbsp;")    
         return render_template('cwlteam.html', ThisHTML="clanwarleague", ClanWar=cwl_summary_data, 
-                               clanlist=clanlist, clansummary=clansummary, dumpdata=dumpdata)
+                               clanlist=clanlist, clansummary=clansummary, dumpdata=dumpdata,
+                               cocparm=current_app.cocinfo_cocparm)
     else:
         flash(f"Error fetching CWL summary for clan {clan_tag}, season {season}: {cwl_summary_data.get('error', 'Unknown error')}", 'danger')
-        return render_template('cwlteam.html', ThisHTML="clanwarleague", ClanWar=None, clanlist=None, clansummary=None)
+        return render_template('cwlteam.html', ThisHTML="clanwarleague", ClanWar=None, clanlist=None, 
+                               clansummary=None, 
+                               cocparm=current_app.cocinfo_cocparm)
 
 
 

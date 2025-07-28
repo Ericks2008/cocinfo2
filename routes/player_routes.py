@@ -3,7 +3,6 @@
 from flask import Blueprint, render_template, request, current_app, flash
 import urllib.parse
 import copy
-import cocparm # Assuming cocparm is accessible or passed
 
 from flask_wtf import FlaskForm
 from wtforms.fields import DateField
@@ -41,7 +40,8 @@ def display_player_info(player_tag):
         player_data = None # Ensure PlayerData is None
 
     return render_template('player_info.html', ThisHTML="player", PlayerData=player_data, 
-                           PlayerMetric=PlayerMetric, form=form)
+                           PlayerMetric=PlayerMetric, form=form, 
+                           cocparm=current_app.cocinfo_cocparm)
 
 @player_bp.route('/player/<string:player_tag>/upgrade/progress', methods=['GET'])
 def display_player_progress(player_tag):
@@ -58,7 +58,8 @@ def display_player_progress(player_tag):
         flash("An unexpected error occurred while fetching player upgrade data. Please try again later.", 'danger')
         player_data = None
 
-    return render_template('playerprogress.html', ThisHTML="player", PlayerData=player_data)
+    return render_template('playerprogress.html', ThisHTML="player", PlayerData=player_data,
+                           cocparm=current_app.cocinfo_cocparm)
 
 
 

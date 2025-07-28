@@ -43,6 +43,8 @@
           <th class="sticky-header sticky-corner">Member</th>
 
           {# Hero Headers #}
+          {% set heroeslist = cocparm['heroeslist'] %}
+          {% set icon = cocparm['icon'] %}
           {% for item in heroeslist %}
             <th class="text-center sticky-header" colspan="3">
               <img height="30" width="30" src="{{ url_for('static', filename=icon[item]) }}" alt="{{ item }}" 
@@ -50,6 +52,7 @@
           {% endfor %}
 
           {# Hero Equipment Headers #}
+          {% set heroequipmentslist = cocparm['heroequipmentslist'] %}
           {% for item in heroequipmentslist %}
           <th class="text-center sticky-header">
               <img height="30" width="30" src="{{ url_for('static', filename=icon[item]) }}" alt="{{ item }}" 
@@ -57,6 +60,11 @@
           {% endfor %}
 
           {# Pets, Sieges, Troops, Dark Troops, Spells #}
+          {% set petslist = cocparm['petslist'] %}
+          {% set siegemachinelist = cocparm['siegemachinelist'] %}
+          {% set troopslist = cocparm['troopslist'] %}
+          {% set darktroopslist = cocparm['darktroopslist'] %}
+          {% set spellslist = cocparm['spellslist'] %}
           {% for item_type in [petslist, siegemachinelist, troopslist, darktroopslist, spellslist] %}
             {% for item in item_type %}
               <th class="text-center sticky-header">
@@ -78,6 +86,7 @@
                            class="text-decoration-none">{{ member['name'] }}</a></th>
 
               {# hero levels and their equipment #}
+              {% set troopsdetail = cocparm['troopsdetail'] %}
               {% for hero_item in heroeslist %}
                 {% set hero_data = member.detail.heroeslist.get(hero_item) %}
                 <td class="text-center">
