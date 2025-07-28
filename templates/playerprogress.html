@@ -13,10 +13,10 @@
     {# Buttons Group #}
     <div class="d-flex flex-wrap gap-2 mb-3">
       <a href="{{ url_for('player_bp.display_player_info', player_tag=formatted_playertag) }}" 
-          class="btn btn-primary btn-sm">90 Days</a>
+          class="btn btn-secondary btn-sm">90 Days</a>
       <a href="{{ url_for('player_bp.display_player_progress', player_tag=formatted_playertag) }}" 
-          class="btn btn-secondary btn-sm active" aria-current="page">Upgrade Progress</a>
-      <a href="https://www.clashofstats.com/players/{{ formatted_playertag }}/history/log" class="btn btn-secondary btn-sm"
+          class="btn btn-primary btn-sm active" aria-current="page">Upgrade Progress</a>
+      <a href="https://www.clashofstats.com/players/{{ formatted_playertag }}/history/log" class="btn btn-outline-info btn-sm"
         target="_blank" rel="noopener noreferrer">History Log<i class="bi bi-box-arrow-up-right ms-1"></i></a>
     </div>
   {% else %}
