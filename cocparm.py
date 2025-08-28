@@ -176,6 +176,12 @@ cocparm = {
     13 : {'max' : 18, 'min' : 18}, 12 : {'max' : 18, 'min' : 15}, 11 : {'max' : 15, 'min' : 15},
     10 : {'max' : 15, 'min' : 12}, 9 : {'max' : 12, 'min' : 12}, 8 : {'max' : 12, 'min' : 0}
     },
+    'Heroic Torch' : {
+    17 : {'max' : 27, 'min' : 27},
+    16 : {'max' : 27, 'min' : 24}, 15 : {'max' : 24, 'min' : 21}, 14 : {'max' : 21, 'min' : 18},
+    13 : {'max' : 18, 'min' : 18}, 12 : {'max' : 18, 'min' : 15}, 11 : {'max' : 15, 'min' : 15},
+    10 : {'max' : 15, 'min' : 12}, 9 : {'max' : 12, 'min' : 12}, 8 : {'max' : 12, 'min' : 0}
+    },
     'Seeking Shield' : {
     17 : {'max' : 18, 'min' : 18},
     16 : {'max' : 18, 'min' : 18}, 15 : {'max' : 18, 'min' : 18}, 14 : {'max' : 18, 'min' : 15},
@@ -637,6 +643,7 @@ cocparm = {
     'Healing Tome' : 'HealingTome.webp',
     'Fireball' : 'Fireball.webp',
     'Lavaloon Puppet' : 'LavaloonPuppet.png',
+    'Heroic Torch' : 'HeroicTorch.webp',
     'Seeking Shield' : 'SeekingShield.webp',
     'Royal Gem' : 'RoyalGem.webp',
     'Haste Vial' : 'HasteVial.webp',
@@ -723,6 +730,7 @@ cocparm = {
     'Archer Puppet', 'Frozen Arrow', 'Invisibility Vial', 'Healer Puppet', 'Giant Arrow', 'Magic Mirror',
     'Action Figure',
     'Eternal Tome', 'Life Gem', 'Rage Gem', 'Healing Tome', 'Fireball', 'Lavaloon Puppet',
+    'Heroic Torch',
     'Seeking Shield', 'Royal Gem', 'Haste Vial', 'Hog Rider Puppet', 'Rocket Spear', 'Electro Boots',
     'Henchmen Puppet', 'Dark Orb', 'Metal Pants', 'Noble Iron', 'Dark Crown'
     ],
