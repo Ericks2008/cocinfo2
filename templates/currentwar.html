@@ -2,6 +2,7 @@
 
 {% block header %}
   {% if ClanWar %}
+    {% if ClanWar['state'] != 'notInWar' %}
     {% set formatted_clantag = ClanWar['clan']['tag'][1:] %}
 
     <div class="d-flex align-items-center mb-3">
@@ -23,7 +24,11 @@
       <a href="https://www.clashofstats.com/clans/{{ formatted_clantag }}/history/past-members" class="btn btn-outline-info btn-sm"
         target="_blank" rel="noopener noreferrer">Past Members<i class="bi bi-box-arrow-up-right ms-1"></i></a>
     </div>
-
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        Not in Clan War.
+    </div>
+    {% endif %}
   {% else %}
     <div class="alert alert-info text-center" role="alert">
         Clan War data is unavailable.
@@ -34,6 +39,7 @@
 
 {% block content %}
   {% if ClanWar %}
+    {% if ClanWar['state'] != 'notInWar' %}
     {#########################}
     {# Clan War Summary Card #}
     {#########################}
@@ -61,7 +67,6 @@
       </div>
     </div>
 
-    {% if ClanWar['state'] != 'notInWar' %}
     <h2 class="h5 mb-3">War Score</h2>
     <div class="table-responsive mb-4">
       <table class="table table-bordered table-striped table-hover text-center align-middle">
