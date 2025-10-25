@@ -51,7 +51,9 @@
         <tbody>
           {% for member in ClanData['memberList'] %}
             <tr>
-              <td class="text-center"><img src="{{ member['league']['iconUrls']['tiny'] }}" alt="{{ member['league']['name'] }}" class="img-fluid"></td>
+              <td class="text-center">
+                <img height=40px width=40px src="{{ member['leagueTier']['iconUrls']['small'] }}" 
+                alt="{{ member['leagueTier']['name'] }}" class="img-fluid"></td>
               <td class="text-center"><img height=40px width=40px src="{{ url_for('static', filename='1_' + member['townHallLevel']|string + '.png') }}" 
                          alt="{{ member['townHallLevel'] }}" class="img-fluid"></td>
               <td>

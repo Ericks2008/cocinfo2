@@ -287,6 +287,99 @@
       </table>
     </div>
 
+    {#######################}
+    {# Clan War Attack Log #}
+    {#######################}
+    <h2 class="h5 mb-3">Clan War Attack Log</h2>
+    <div class="table-responsive mb-4">
+      <table class="table table-bordered table-striped table-hover text-center align-middle">
+        <thead>
+          <tr>
+            <th class="text-nowrap">{{ ClanWar['clan']['name'] }}</th>
+            <th class="text-nowrap">attack 1</th>
+            <th class="text-nowrap">attack 2</th>
+            <th class="text-nowrap">{{ ClanWar['opponent']['name'] }}</th>
+            <th class="text-nowrap">attack 1</th>
+            <th class="text-nowrap">attack 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in range(1,ClanWar['teamSize']+1) %}
+            <tr>
+              {# Clan Member Info #}
+              <td class="text-start text-nowrap">
+                {{ i }}.&nbsp;/&nbsp;TH{{ ClanWarTeam['clan'][i]['townhallLevel'] }}&nbsp;/&nbsp;
+                {{ ClanWarTeam['clan'][i]['name'] }}
+              </td>
+
+              {# clan Member Attack 1 #}
+              {% if ClanWarTeam['clan'][i]['attacks'] and ClanWarTeam['clan'][i]['attacks'][0] %}
+                {% set attack = ClanWarTeam['clan'][i]['attacks'][0] %}
+                <td class="text-start text-nowrap">
+                  {{ ClanWarTeam['player'][attack.defenderTag]['mapPosition'] }}.&nbsp;/&nbsp;
+                  TH{{ ClanWarTeam['player'][attack.defenderTag]['townhallLevel'] }}&nbsp;/&nbsp;
+                  {{ ClanWarTeam['player'][attack.defenderTag]['name'] }}&nbsp;/&nbsp;
+                  <small>
+                    {{ attack.stars }}&nbsp;Stars
+                    <span class="mx-1">/</span>{{ "%.1f"|format(attack.destructionPercentage) }}%
+                  </small>
+                </td>
+              {% else %}<td></td>{% endif %}
+
+              {# clan Member Attack 2 #}
+              {% if ClanWarTeam['clan'][i]['attacks']|length > 1 %}
+                {% set attack = ClanWarTeam['clan'][i]['attacks'][1] %}
+                <td class="text-start text-nowrap">
+                  {{ ClanWarTeam['player'][attack.defenderTag]['mapPosition'] }}.&nbsp;/&nbsp;
+                  TH{{ ClanWarTeam['player'][attack.defenderTag]['townhallLevel'] }}&nbsp;/&nbsp;
+                  {{ ClanWarTeam['player'][attack.defenderTag]['name'] }}&nbsp;/&nbsp;
+                  <small>
+                    {{ attack.stars }}&nbsp;Stars
+                    <span class="mx-1">/</span>{{ "%.1f"|format(attack.destructionPercentage) }}%
+                  </small>
+                </td>
+              {% else %}<td></td>{% endif %}
+
+              {# Opponent Member Info #}
+              <td class="text-start text-nowrap">
+                {{ i }}.&nbsp;/&nbsp;TH{{ ClanWarTeam['opponent'][i]['townhallLevel'] }}&nbsp;/&nbsp;
+                {{ ClanWarTeam['opponent'][i]['name'] }}
+              </td>
+
+              {# Opponent Member Attack 1 #}
+              {% if ClanWarTeam['opponent'][i]['attacks'] and ClanWarTeam['opponent'][i]['attacks'][0] %}
+                {% set attack = ClanWarTeam['opponent'][i]['attacks'][0] %}
+                <td class="text-start text-nowrap">
+                  {{ ClanWarTeam['player'][attack.defenderTag]['mapPosition'] }}.&nbsp;/&nbsp;
+                  TH{{ ClanWarTeam['player'][attack.defenderTag]['townhallLevel'] }}&nbsp;/&nbsp;
+                    {{ ClanWarTeam['player'][attack.defenderTag]['name'] }}
+                  <small>
+                    {{ attack.stars }}&nbsp;Stars
+                    <span class="mx-1">/</span>{{ "%.1f"|format(attack.destructionPercentage) }}%
+                  </small>
+                </td>
+              {% else %}<td></td>{% endif %}
+
+              {# Opponent Member Attack 2 #}
+              {% if ClanWarTeam['opponent'][i]['attacks']|length > 1 %}
+                {% set attack = ClanWarTeam['opponent'][i]['attacks'][1] %}
+                <td class="text-start text-nowrap">
+                  {{ ClanWarTeam['player'][attack.defenderTag]['mapPosition'] }}.&nbsp;/&nbsp;
+                  TH{{ ClanWarTeam['player'][attack.defenderTag]['townhallLevel'] }}&nbsp;/&nbsp;
+                  {{ ClanWarTeam['player'][attack.defenderTag]['name'] }}
+                  <small>
+                    {{ attack.stars }}&nbsp;Stars
+                    <span class="mx-1">/</span>{{ "%.1f"|format(attack.destructionPercentage) }}%
+                  </small>
+                </td>
+              {% else %}<td></td>{% endif %}
+            </tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
     {##################################}
     {# Clan War Attack Sequence Table #}
     {##################################}

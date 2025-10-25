@@ -82,7 +82,7 @@
                   <img height="30" width="30" src="{{ url_for('static', filename='1_' + member['townHallLevel']|string + '.png') }}" 
                   alt="TH{{ member['townHallLevel'] }}"></th>
               <th class="sticky-column-left">
-                  <a href="{{ url_for('player_bp.display_player_info', player_tag=member['tag'][1:]) }} 
+                  <a href="{{ url_for('player_bp.display_player_info', player_tag=member['tag'][1:]) }}" 
                            class="text-decoration-none">{{ member['name'] }}</a></th>
 
               {# hero levels and their equipment #}
