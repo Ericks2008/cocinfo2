@@ -219,6 +219,12 @@ cocparm = {
     13 : {'max' : 18, 'min' : 18}, 12 : {'max' : 18, 'min' : 15}, 11 : {'max' : 15, 'min' : 15},
     10 : {'max' : 15, 'min' : 12}, 9 : {'max' : 12, 'min' : 12}, 8 : {'max' : 12, 'min' : 0}
     },
+    'Frost Flake' : {
+    18 : {'max' : 27, 'min' : 27}, 17 : {'max' : 27, 'min' : 27},
+    16 : {'max' : 27, 'min' : 24}, 15 : {'max' : 24, 'min' : 21}, 14 : {'max' : 21, 'min' : 18},
+    13 : {'max' : 18, 'min' : 18}, 12 : {'max' : 18, 'min' : 15}, 11 : {'max' : 15, 'min' : 15},
+    10 : {'max' : 15, 'min' : 12}, 9 : {'max' : 12, 'min' : 12}, 8 : {'max' : 12, 'min' : 0}
+    },
     'Henchmen Puppet' : {
     18 : {'max' : 18, 'min' : 18}, 17 : {'max' : 18, 'min' : 18},
     16 : {'max' : 18, 'min' : 18}, 15 : {'max' : 18, 'min' : 18}, 14 : {'max' : 18, 'min' : 15},
@@ -676,6 +682,7 @@ cocparm = {
     'Dark Crown' : 'DarkCrown.webp',
     'Rocket Spear' : 'RocketSpear.webp',
     'Electro Boots' : 'ElectroBoots.png',
+    'Frost Flake' : 'FrostFlake.webp',
     'Meteor Staff' : 'MeteorStaff.webp',
     'L.A.S.S.I' : 'Lassi.webp',
     'Electro Owl' : 'ElectroOwl.webp',
@@ -754,6 +761,7 @@ cocparm = {
     'Eternal Tome', 'Life Gem', 'Rage Gem', 'Healing Tome', 'Fireball', 'Lavaloon Puppet',
     'Heroic Torch',
     'Seeking Shield', 'Royal Gem', 'Haste Vial', 'Hog Rider Puppet', 'Rocket Spear', 'Electro Boots',
+    'Frost Flake',
     'Henchmen Puppet', 'Dark Orb', 'Metal Pants', 'Noble Iron', 'Dark Crown', 'Meteor Staff'
     ],
 
