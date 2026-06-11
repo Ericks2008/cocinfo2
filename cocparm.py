@@ -1,7 +1,8 @@
 
 cocparm = {
 
-'heroeslist': ['Barbarian King', 'Archer Queen', 'Grand Warden', 'Royal Champion', 'Minion Prince'],
+'heroeslist': ['Barbarian King', 'Archer Queen', 'Grand Warden', 'Royal Champion', 
+               'Minion Prince', 'Dragon Duke'],
 
 'troopsdetail': {
     'Barbarian King' : {
@@ -60,6 +61,12 @@ cocparm = {
     11 : {'max' : 30, 'min' : 20},
     10 : {'max' : 20, 'min' : 10},
     9 : {'max' : 10, 'min' : 0}
+    },
+    'Dragon Duke' : {
+    18 : {'max' : 25, 'min' : 20},
+    17 : {'max' : 20, 'min' : 15},
+    16 : {'max' : 15, 'min' : 10},
+    15 : {'max' : 10, 'min' : 0}
     },
     ##################
     # Hero Equipment #
@@ -142,6 +149,12 @@ cocparm = {
     10 : {'max' : 15, 'min' : 12}, 9 : {'max' : 12, 'min' : 12}, 8 : {'max' : 12, 'min' : 0}
     },
     'Action Figure' : {
+    18 : {'max' : 27, 'min' : 27}, 17 : {'max' : 27, 'min' : 27},
+    16 : {'max' : 27, 'min' : 24}, 15 : {'max' : 24, 'min' : 21}, 14 : {'max' : 21, 'min' : 18},
+    13 : {'max' : 18, 'min' : 18}, 12 : {'max' : 18, 'min' : 15}, 11 : {'max' : 15, 'min' : 15},
+    10 : {'max' : 15, 'min' : 12}, 9 : {'max' : 12, 'min' : 12}, 8 : {'max' : 12, 'min' : 0}
+    },
+    'Monolith Arrow' : {
     18 : {'max' : 27, 'min' : 27}, 17 : {'max' : 27, 'min' : 27},
     16 : {'max' : 27, 'min' : 24}, 15 : {'max' : 24, 'min' : 21}, 14 : {'max' : 21, 'min' : 18},
     13 : {'max' : 18, 'min' : 18}, 12 : {'max' : 18, 'min' : 15}, 11 : {'max' : 15, 'min' : 15},
@@ -260,6 +273,31 @@ cocparm = {
     13 : {'max' : 18, 'min' : 18}, 12 : {'max' : 18, 'min' : 15}, 11 : {'max' : 15, 'min' : 15},
     10 : {'max' : 15, 'min' : 12}, 9 : {'max' : 12, 'min' : 12}, 8 : {'max' : 12, 'min' : 0}
     },
+    'Fire Heart' : {
+    18 : {'max' : 18, 'min' : 18}, 17 : {'max' : 18, 'min' : 18},
+    16 : {'max' : 18, 'min' : 18}, 15 : {'max' : 18, 'min' : 18}, 14 : {'max' : 18, 'min' : 15},
+    13 : {'max' : 15, 'min' : 15}, 12 : {'max' : 15, 'min' : 12}, 11 : {'max' : 12, 'min' : 12},
+    10 : {'max' : 12, 'min' : 9}, 9 : {'max' : 9, 'min' : 9}, 8 : {'max' : 9, 'min' : 0}
+    },
+    'Flame Blower' : {
+    18 : {'max' : 18, 'min' : 18}, 17 : {'max' : 18, 'min' : 18},
+    16 : {'max' : 18, 'min' : 18}, 15 : {'max' : 18, 'min' : 18}, 14 : {'max' : 18, 'min' : 15},
+    13 : {'max' : 15, 'min' : 15}, 12 : {'max' : 15, 'min' : 12}, 11 : {'max' : 12, 'min' : 12},
+    10 : {'max' : 12, 'min' : 9}, 9 : {'max' : 9, 'min' : 9}, 8 : {'max' : 9, 'min' : 0}
+    },
+    'Stun Blaster' : {
+    18 : {'max' : 18, 'min' : 18}, 17 : {'max' : 18, 'min' : 18},
+    16 : {'max' : 18, 'min' : 0}
+    },
+    'Electro Fangs' : {
+    18 : {'max' : 18, 'min' : 18}, 17 : {'max' : 18, 'min' : 0}
+    },
+    'Rocket Backpack' : {
+    18 : {'max' : 27, 'min' : 27}, 17 : {'max' : 27, 'min' : 27},
+    16 : {'max' : 27, 'min' : 24}, 15 : {'max' : 24, 'min' : 21}, 14 : {'max' : 21, 'min' : 18},
+    13 : {'max' : 18, 'min' : 18}, 12 : {'max' : 18, 'min' : 15}, 11 : {'max' : 15, 'min' : 15},
+    10 : {'max' : 15, 'min' : 12}, 9 : {'max' : 12, 'min' : 12}, 8 : {'max' : 12, 'min' : 0}
+    },
     ########
     # Pets #
     ########
@@ -306,6 +344,9 @@ cocparm = {
     'Sneezy' : {
     18 : {'max' : 10, 'min' : 10}, 17 : {'max' : 10, 'min' : 10}
     },
+    'Greedy Raven' : {
+    18 : {'max' : 10, 'min' : 0}
+    },
     #################
     # Seige Machine #
     #################
@@ -315,7 +356,7 @@ cocparm = {
     13 : {'max' : 4, 'min' : 3}, 12 : {'max' : 3, 'min' : 0}
     },
     'Battle Blimp' : {
-    18 : {'max' : 5, 'min' : 5}, 17 : {'max' : 5, 'min' : 4},
+    18 : {'max' : 6, 'min' : 5}, 17 : {'max' : 5, 'min' : 4},
     16 : {'max' : 4, 'min' : 4}, 15 : {'max' : 4, 'min' : 4}, 14 : {'max' : 4, 'min' : 4},
     13 : {'max' : 4, 'min' : 3}, 12 : {'max' : 3, 'min' : 0}
     },
@@ -325,12 +366,12 @@ cocparm = {
     13 : {'max' : 4, 'min' : 3}, 12 : {'max' : 3, 'min' : 0}
     },
     'Siege Barracks' : {
-    18 : {'max' : 5, 'min' : 5}, 17 : {'max' : 5, 'min' : 5},
+    18 : {'max' : 6, 'min' : 5}, 17 : {'max' : 5, 'min' : 5},
     16 : {'max' : 5, 'min' : 4}, 15 : {'max' : 4, 'min' : 4}, 14 : {'max' : 4, 'min' : 4},
     13 : {'max' : 4, 'min' : 0}
     },
     'Log Launcher' : {
-    18 : {'max' : 5, 'min' : 5}, 17 : {'max' : 5, 'min' : 5},
+    18 : {'max' : 6, 'min' : 5}, 17 : {'max' : 5, 'min' : 5},
     16 : {'max' : 5, 'min' : 4}, 15 : {'max' : 4, 'min' : 4}, 14 : {'max' : 4, 'min' : 4},
     13 : {'max' : 4, 'min' : 0}
     },
@@ -339,18 +380,21 @@ cocparm = {
     16 : {'max' : 5, 'min' : 4}, 15 : {'max' : 4, 'min' : 4}, 14 : {'max' : 4, 'min' : 0}
     },
     'Battle Drill' : {
-    18 : {'max' : 5, 'min' : 5}, 17 : {'max' : 5, 'min' : 4},
+    18 : {'max' : 6, 'min' : 5}, 17 : {'max' : 5, 'min' : 4},
     16 : {'max' : 4, 'min' : 4}, 15 : {'max' : 4, 'min' : 0}
     },
     'Troop Launcher' : {
     18 : {'max' : 4, 'min' : 4}, 17 : {'max' : 4, 'min' : 3},
     16 : {'max' : 3, 'min' : 0}
     },
+    'Sky Wagon' : {
+    18 : {'max' : 4, 'min' : 2}, 17 : {'max' : 2, 'min' : 0}
+    },
     #################
     # Elixir Troops #
     #################
     'Barbarian' : {
-    18 : {'max' : 12, 'min' : 12}, 17 : {'max' : 12, 'min' : 12},
+    18 : {'max' : 13, 'min' : 12}, 17 : {'max' : 12, 'min' : 12},
     16 : {'max' : 12, 'min' : 11}, 15 : {'max' : 11, 'min' : 10}, 14 : {'max' : 10, 'min' : 9},
     13 : {'max' : 9, 'min' : 9}, 12 : {'max' : 9, 'min' : 8}, 11 : {'max' : 8, 'min' : 7},
     10 : {'max' : 7, 'min' : 6}, 9 : {'max' : 6, 'min' : 5}, 8 : {'max' : 5, 'min' : 4},
@@ -366,7 +410,7 @@ cocparm = {
     4 : {'max' : 2, 'min' : 2}, 3 : {'max' : 2, 'min' : 1}
     },
     'Goblin' : {
-    18 : {'max' : 9, 'min' : 9}, 17 : {'max' : 9, 'min' : 9},
+    18 : {'max' : 10, 'min' : 9}, 17 : {'max' : 9, 'min' : 9},
     16 : {'max' : 9, 'min' : 9}, 15 : {'max' : 9, 'min' : 8}, 14 : {'max' : 8, 'min' : 8},
     13 : {'max' : 8, 'min' : 8}, 12 : {'max' : 8, 'min' : 7}, 11 : {'max' : 7, 'min' : 7},
     10 : {'max' : 7, 'min' : 6}, 9 : {'max' : 6, 'min' : 5}, 8 : {'max' : 5, 'min' : 4},
@@ -390,7 +434,7 @@ cocparm = {
     4 : {'max' : 2, 'min' : 0}
     },
     'Balloon' : {
-    18 : {'max' : 12, 'min' : 12}, 17 : {'max' : 12, 'min' : 11},
+    18 : {'max' : 13, 'min' : 12}, 17 : {'max' : 12, 'min' : 11},
     16 : {'max' : 11, 'min' : 10}, 15 : {'max' : 10, 'min' : 10}, 14 : {'max' : 10, 'min' : 9},
     13 : {'max' : 9, 'min' : 8}, 12 : {'max' : 8, 'min' : 7}, 11 : {'max' : 7, 'min' : 6},
     10 : {'max' : 6, 'min' : 6}, 9 : {'max' : 6, 'min' : 5}, 8 : {'max' : 5, 'min' : 4},
@@ -412,14 +456,14 @@ cocparm = {
     7 : {'max' : 2, 'min' : 0}
     },
     'Dragon' : {
-    18 : {'max' : 12, 'min' : 12}, 17 : {'max' : 12, 'min' : 11},
+    18 : {'max' : 13, 'min' : 12}, 17 : {'max' : 12, 'min' : 11},
     16 : {'max' : 11, 'min' : 10}, 15 : {'max' : 10, 'min' : 9}, 14 : {'max' : 9, 'min' : 8},
     13 : {'max' : 8, 'min' : 7}, 12 : {'max' : 7, 'min' : 6}, 11 : {'max' : 6, 'min' : 5},
     10 : {'max' : 5, 'min' : 4}, 9 : {'max' : 4, 'min' : 3}, 8 : {'max' : 3, 'min' : 2},
     7 : {'max' : 2, 'min' : 0}
     },
     'P.E.K.K.A' : {
-    18 : {'max' : 12, 'min' : 12}, 17 : {'max' : 12, 'min' : 11},
+    18 : {'max' : 13, 'min' : 12}, 17 : {'max' : 12, 'min' : 11},
     16 : {'max' : 11, 'min' : 10}, 15 : {'max' : 10, 'min' : 9}, 14 : {'max' : 9, 'min' : 9},
     13 : {'max' : 9, 'min' : 8}, 12 : {'max' : 8, 'min' : 7}, 11 : {'max' : 7, 'min' : 6},
     10 : {'max' : 6, 'min' : 4}, 9 : {'max' : 4, 'min' : 3}, 8 : {'max' : 3, 'min' : 0}
@@ -442,7 +486,7 @@ cocparm = {
     13 : {'max' : 4, 'min' : 3}, 12 : {'max' : 3, 'min' : 2}, 11 : {'max' : 2, 'min' : 0}
     },
     'Yeti' : {
-    18 : {'max' : 7, 'min' : 7}, 17 : {'max' : 7, 'min' : 6},
+    18 : {'max' : 8, 'min' : 7}, 17 : {'max' : 7, 'min' : 6},
     16 : {'max' : 6, 'min' : 5}, 15 : {'max' : 5, 'min' : 4}, 14 : {'max' : 4, 'min' : 3},
     13 : {'max' : 3, 'min' : 2}, 12 : {'max' : 2, 'min' : 0}
     },
@@ -456,11 +500,11 @@ cocparm = {
     16 : {'max' : 4, 'min' : 3}, 15 : {'max' : 3, 'min' : 2}, 14 : {'max' : 2, 'min' : 0}
     },
     'Root Rider' : {
-    18 : {'max' : 3, 'min' : 3}, 17 : {'max' : 3, 'min' : 3},
+    18 : {'max' : 4, 'min' : 3}, 17 : {'max' : 3, 'min' : 3},
     16 : {'max' : 3, 'min' : 2}, 15 : {'max' : 2, 'min' : 0}
     },
     'Thrower' : {
-    18 : {'max' : 3, 'min' : 3}, 17 : {'max' : 3, 'min' : 2}, 16 : {'max' : 2, 'min' : 0}
+    18 : {'max' : 4, 'min' : 3}, 17 : {'max' : 3, 'min' : 2}, 16 : {'max' : 2, 'min' : 0}
     },
     'Meteor Golem' : { 
     18 : {'max' : 3, 'min' : 2}, 17 : {'max' : 2, 'min' : 0}
@@ -483,7 +527,7 @@ cocparm = {
     7 : {'max' : 2, 'min' : 0}
     },
     'Valkyrie' : {
-    18 : {'max' : 11, 'min' : 11}, 17 : {'max' : 11, 'min' : 11},
+    18 : {'max' : 12, 'min' : 11}, 17 : {'max' : 11, 'min' : 11},
     16 : {'max' : 11, 'min' : 10}, 15 : {'max' : 10, 'min' : 9}, 14 : {'max' : 9, 'min' : 8},
     13 : {'max' : 8, 'min' : 7}, 12 : {'max' : 7, 'min' : 6}, 11 : {'max' : 6, 'min' : 5},
     10 : {'max' : 5, 'min' : 4}, 9 : {'max' : 4, 'min' : 2}, 8 : {'max' : 2, 'min' : 0}
@@ -518,7 +562,7 @@ cocparm = {
     13 : {'max' : 5, 'min' : 5}, 12 : {'max' : 5, 'min' : 3}, 11 : {'max' : 3, 'min' : 0}
     },
     'Headhunter' : {
-    18 : {'max' : 3, 'min' : 3}, 17 : {'max' : 3, 'min' : 3},
+    18 : {'max' : 4, 'min' : 3}, 17 : {'max' : 3, 'min' : 3},
     16 : {'max' : 3, 'min' : 3}, 15 : {'max' : 3, 'min' : 3}, 14 : {'max' : 3, 'min' : 3},
     13 : {'max' : 3, 'min' : 2}, 12 : {'max' : 2, 'min' : 0}
     },
@@ -528,7 +572,7 @@ cocparm = {
     13 : {'max' : 2, 'min' : 0}
     },
     'Druid' : {
-    18 : {'max' : 5, 'min' : 5}, 17 : {'max' : 5, 'min' : 4},
+    18 : {'max' : 6, 'min' : 5}, 17 : {'max' : 5, 'min' : 4},
     16 : {'max' : 4, 'min' : 3}, 15 : {'max' : 3, 'min' : 2}, 14 : {'max' : 2, 'min' : 0}
     },
     'Furnace' : {
@@ -555,7 +599,7 @@ cocparm = {
     4 : {'max' : 2, 'min' : 0}
     },
     'Rage Spell' : {
-    18 : {'max' : 6, 'min' : 6}, 17 : {'max' : 6, 'min' : 6},
+    18 : {'max' : 7, 'min' : 6}, 17 : {'max' : 6, 'min' : 6},
     16 : {'max' : 6, 'min' : 6}, 15 : {'max' : 6, 'min' : 6}, 14 : {'max' : 6, 'min' : 6},
     13 : {'max' : 6, 'min' : 6}, 12 : {'max' : 6, 'min' : 5}, 11 : {'max' : 5, 'min' : 5},
     10 : {'max' : 5, 'min' : 5}, 9 : {'max' : 5, 'min' : 5}, 8 : {'max' : 5, 'min' : 4},
@@ -569,13 +613,13 @@ cocparm = {
     7 : {'max' : 2, 'min' : 2}, 6 : {'max' : 2, 'min' : 0}
     },
     'Freeze Spell' : {
-    18 : {'max' : 7, 'min' : 7}, 17 : {'max' : 7, 'min' : 7},
+    18 : {'max' : 8, 'min' : 7}, 17 : {'max' : 7, 'min' : 7},
     16 : {'max' : 7, 'min' : 7}, 15 : {'max' : 7, 'min' : 7}, 14 : {'max' : 7, 'min' : 7},
     13 : {'max' : 7, 'min' : 7}, 12 : {'max' : 7, 'min' : 6}, 11 : {'max' : 6, 'min' : 5},
     10 : {'max' : 5, 'min' : 2}, 9 : {'max' : 2, 'min' : 0}
     },
     'Clone Spell' : {
-    18 : {'max' : 8, 'min' : 8}, 17 : {'max' : 8, 'min' : 8},
+    18 : {'max' : 9, 'min' : 8}, 17 : {'max' : 8, 'min' : 8},
     16 : {'max' : 8, 'min' : 8}, 15 : {'max' : 8, 'min' : 7}, 14 : {'max' : 7, 'min' : 6},
     13 : {'max' : 6, 'min' : 5}, 12 : {'max' : 5, 'min' : 5}, 11 : {'max' : 5, 'min' : 3},
     10 : {'max' : 3, 'min' : 0}
@@ -586,7 +630,7 @@ cocparm = {
     13 : {'max' : 4, 'min' : 3}, 12 : {'max' : 3, 'min' : 2}, 11 : {'max' : 2, 'min' : 0}
     },
     'Recall Spell' : {
-    18 : {'max' : 6, 'min' : 6}, 17 : {'max' : 6, 'min' : 5},
+    18 : {'max' : 7, 'min' : 6}, 17 : {'max' : 6, 'min' : 5},
     16 : {'max' : 5, 'min' : 4}, 15 : {'max' : 4, 'min' : 3}, 14 : {'max' : 3, 'min' : 2},
     13 : {'max' : 2, 'min' : 0}
     },
@@ -632,12 +676,12 @@ cocparm = {
     10 : {'max' : 3, 'min' : 0}
     },
     'Overgrowth Spell' : {
-    18 : {'max' : 4, 'min' : 4}, 17 : {'max' : 4, 'min' : 4},
+    18 : {'max' : 5, 'min' : 4}, 17 : {'max' : 4, 'min' : 4},
     16 : {'max' : 4, 'min' : 3}, 15 : {'max' : 3, 'min' : 3}, 14 : {'max' : 3, 'min' : 2},
     13 : {'max' : 2, 'min' : 2}, 12 : {'max' : 2, 'min' : 0}
     },
     'Ice Block Spell' : {
-    18 : {'max' : 5, 'min' : 5}, 17 : {'max' : 5, 'min' : 4},
+    18 : {'max' : 6, 'min' : 5}, 17 : {'max' : 5, 'min' : 4},
     16 : {'max' : 4, 'min' : 3}, 15 : {'max' : 3, 'min' : 2}, 14 : {'max' : 2, 'min' : 0}
     }
 },
@@ -648,12 +692,14 @@ cocparm = {
     'Grand Warden' : 'GrandWarden.webp',
     'Royal Champion' : 'RoyalChampion.webp',
     'Minion Prince' : 'MinionPrince.png',
+    'Dragon Duke' : 'DragonDuke.webp',
     'Giant Gauntlet' : 'GiantGauntlet.webp',
     'Barbarian Puppet' : 'BarbarianPuppet.webp',
     'Rage Vial' : 'RageVial.webp',
     'Vampstache' : 'Vampstache.webp',
     'Spiky Ball' : 'SpikyBall.webp',
     'Snake Bracelet' : 'SnakeBracelet.png',
+    'Stick Horse' : 'StickHorse.webp',
     'Earthquake Boots' : 'EarthquakeBoots.webp',
     'Archer Puppet' : 'ArcherPuppet.webp',
     'Frozen Arrow' : 'FrozenArrow.webp',
@@ -684,6 +730,11 @@ cocparm = {
     'Electro Boots' : 'ElectroBoots.png',
     'Frost Flake' : 'FrostFlake.webp',
     'Meteor Staff' : 'MeteorStaff.webp',
+    'Fire Heart' : 'FireHeart.webp', 
+    'Flame Blower' : 'FlameBlower.webp', 
+    'Rocket Backpack' : 'RocketBackpack.webp', 
+    'Stun Blaster' : 'StunBlaster.webp', 
+    'Electro Fangs' : 'ElectroFangs.webp',
     'L.A.S.S.I' : 'Lassi.webp',
     'Electro Owl' : 'ElectroOwl.webp',
     'Mighty Yak' : 'MightyYak.webp',
@@ -762,7 +813,8 @@ cocparm = {
     'Heroic Torch',
     'Seeking Shield', 'Royal Gem', 'Haste Vial', 'Hog Rider Puppet', 'Rocket Spear', 'Electro Boots',
     'Frost Flake',
-    'Henchmen Puppet', 'Dark Orb', 'Metal Pants', 'Noble Iron', 'Dark Crown', 'Meteor Staff'
+    'Henchmen Puppet', 'Dark Orb', 'Metal Pants', 'Noble Iron', 'Dark Crown', 'Meteor Staff',
+    'Fire Heart', 'Flame Blower', 'Rocket Backpack', 'Stun Blaster', 'Electro Fangs'
     ],
 
 'petslist': ['L.A.S.S.I', 'Electro Owl', 'Mighty Yak', 'Unicorn', 'Frosty', 'Diggy',
