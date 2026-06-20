@@ -6,7 +6,7 @@ cocparm = {
 
 'troopsdetail': {
     'Barbarian King' : {
-    18 : {'max' : 105, 'min' : 100},
+    18 : {'max' : 110, 'min' : 100},
     17 : {'max' : 100, 'min' : 95},
     16 : {'max' : 95, 'min' : 90},
     15 : {'max' : 90, 'min' : 80},
@@ -20,7 +20,7 @@ cocparm = {
     7 : {'max' : 5, 'min' : 0}
     },
     'Archer Queen' : {
-    18 : {'max' : 105, 'min' : 100},
+    18 : {'max' : 110, 'min' : 100},
     17 : {'max' : 100, 'min' : 95},
     16 : {'max' : 95, 'min' : 90},
     15 : {'max' : 90, 'min' : 80},
@@ -33,7 +33,7 @@ cocparm = {
     8 : {'max' : 10, 'min' : 0}
     },
     'Grand Warden' : {
-    18 : {'max' : 80, 'min' : 75},
+    18 : {'max' : 85, 'min' : 75},
     17 : {'max' : 75, 'min' : 70},
     16 : {'max' : 70, 'min' : 65},
     15 : {'max' : 65, 'min' : 55},
@@ -683,7 +683,12 @@ cocparm = {
     'Ice Block Spell' : {
     18 : {'max' : 6, 'min' : 5}, 17 : {'max' : 5, 'min' : 4},
     16 : {'max' : 4, 'min' : 3}, 15 : {'max' : 3, 'min' : 2}, 14 : {'max' : 2, 'min' : 0}
+    },
+    'Angry Spell' : {
+    18 : {'max' : 4, 'min' : 3}, 17 : {'max' : 3, 'min' : 2},
+    16 : {'max' : 2, 'min' : 0}
     }
+
 },
 
 'icon': {
@@ -746,6 +751,7 @@ cocparm = {
     'Spirit Fox' : 'SpiritFox.webp',
     'Angry Jelly' : 'AngryJelly.webp',
     'Sneezy' : 'Sneezy.png',
+    'Greedy Raven' : 'GreedyRaven.webp',
     'Wall Wrecker' : 'WallWrecker.webp',
     'Battle Blimp' : 'BattleBlimp.webp',
     'Stone Slammer' : 'StoneSlammer.webp',
@@ -754,6 +760,7 @@ cocparm = {
     'Flame Flinger' : 'FlameFlinger.webp',
     'Battle Drill' : 'BattleDrill.webp',
     'Troop Launcher' : 'TroopLauncher.png',
+    'Sky Wagon' : 'SkyWagon.webp',
     'Barbarian' : 'Barbarian.webp',
     'Archer' : 'Archer.webp',
     'Goblin' : 'Goblin.webp',
@@ -785,6 +792,7 @@ cocparm = {
     'Apprentice Warden' : 'ApprenticeWarden.webp',
     'Druid' : 'Druid.webp',
     'Furnace' : 'Furnace.png',
+    'Ruin Witch' : 'RuinWitch.webp',
     'Lightning Spell' : 'LightningSpell.webp',
     'Healing Spell' : 'HealingSpell.webp',
     'Rage Spell' : 'RageSpell.webp',
@@ -801,7 +809,8 @@ cocparm = {
     'Revive Spell' : 'ReviveSpell.png',
     'Totem Spell' : 'TotemSpell.webp',
     'Overgrowth Spell' : 'OvergrowthSpell.webp',
-    'Ice Block Spell' : 'IceBlockSpell.webp'
+    'Ice Block Spell' : 'IceBlockSpell.webp',
+    'Angry Spell' : 'AngrySpell.webp'
 },
 
 'heroequipmentslist': [
@@ -818,11 +827,11 @@ cocparm = {
     ],
 
 'petslist': ['L.A.S.S.I', 'Electro Owl', 'Mighty Yak', 'Unicorn', 'Frosty', 'Diggy',
-    'Poison Lizard', 'Phoenix', 'Spirit Fox', 'Angry Jelly', 'Sneezy'],
+    'Poison Lizard', 'Phoenix', 'Spirit Fox', 'Angry Jelly', 'Sneezy', 'Greedy Raven'],
 
 'siegemachinelist': [
     'Wall Wrecker', 'Battle Blimp', 'Stone Slammer', 'Siege Barracks', 'Log Launcher',
-    'Flame Flinger', 'Battle Drill', 'Troop Launcher'],
+    'Flame Flinger', 'Battle Drill', 'Troop Launcher', 'Sky Wagon'],
 
 'troopslist': [
     'Barbarian', 'Archer', 'Goblin', 'Giant', 'Wall Breaker', 'Balloon', 'Wizard',
@@ -831,12 +840,12 @@ cocparm = {
 
 'darktroopslist': [
     'Minion', 'Hog Rider', 'Valkyrie', 'Golem', 'Witch', 'Lava Hound', 'Bowler', 'Ice Golem',
-    'Headhunter', 'Apprentice Warden', 'Druid', 'Furnace'],
+    'Headhunter', 'Apprentice Warden', 'Druid', 'Furnace', 'Ruin Witch'],
 
 'spellslist': [
     'Lightning Spell', 'Healing Spell', 'Rage Spell', 'Jump Spell', 'Freeze Spell', 'Clone Spell',
     'Invisibility Spell', 'Recall Spell', 'Revive Spell', 'Totem Spell',
     'Poison Spell', 'Earthquake Spell', 'Haste Spell',  'Skeleton Spell',
-    'Bat Spell', 'Overgrowth Spell', 'Ice Block Spell']
+    'Bat Spell', 'Overgrowth Spell', 'Ice Block Spell', 'Angry Spell']
 
 }
