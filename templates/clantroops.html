@@ -131,6 +131,10 @@
                       <span class="badge {{ get_level_badge_class(item_data.level, troopsdetail[item], member.townHallLevel) }}">
                         {{ item_data.level }}
                       </span>
+                    {% else %}
+                      {% if member.townHallLevel in troopsdetail[item] %}
+                        <span class="badge bg-danger">0</span>
+                      {% endif %}
                     {% endif %}
                   </td>
                 {% endfor %}
