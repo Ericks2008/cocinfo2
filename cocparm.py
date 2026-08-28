@@ -298,6 +298,12 @@ cocparm = {
     13 : {'max' : 18, 'min' : 18}, 12 : {'max' : 18, 'min' : 15}, 11 : {'max' : 15, 'min' : 15},
     10 : {'max' : 15, 'min' : 12}, 9 : {'max' : 12, 'min' : 12}, 8 : {'max' : 12, 'min' : 0}
     },
+    'Revenge Deck' : {
+    18 : {'max' : 27, 'min' : 27}, 17 : {'max' : 27, 'min' : 27},
+    16 : {'max' : 27, 'min' : 24}, 15 : {'max' : 24, 'min' : 21}, 14 : {'max' : 21, 'min' : 18},
+    13 : {'max' : 18, 'min' : 18}, 12 : {'max' : 18, 'min' : 15}, 11 : {'max' : 15, 'min' : 15},
+    10 : {'max' : 15, 'min' : 12}, 9 : {'max' : 12, 'min' : 12}, 8 : {'max' : 12, 'min' : 0}
+    },
     ########
     # Pets #
     ########
@@ -738,7 +744,8 @@ cocparm = {
     'Meteor Staff' : 'MeteorStaff.webp',
     'Fire Heart' : 'FireHeart.webp', 
     'Flame Blower' : 'FlameBlower.webp', 
-    'Rocket Backpack' : 'RocketBackpack.webp', 
+    'Rocket Backpack' : 'RocketBackpack.webp',
+    'Revenge Deck' : 'RevengeDeck.webp', 
     'Stun Blaster' : 'StunBlaster.webp', 
     'Electro Fangs' : 'ElectroFangs.webp',
     'L.A.S.S.I' : 'Lassi.webp',
@@ -824,7 +831,7 @@ cocparm = {
     'Seeking Shield', 'Royal Gem', 'Haste Vial', 'Hog Rider Puppet', 'Rocket Spear', 'Electro Boots',
     'Frost Flake',
     'Henchmen Puppet', 'Dark Orb', 'Metal Pants', 'Noble Iron', 'Dark Crown', 'Meteor Staff',
-    'Fire Heart', 'Flame Blower', 'Rocket Backpack', 'Stun Blaster', 'Electro Fangs'
+    'Fire Heart', 'Flame Blower', 'Rocket Backpack', 'Stun Blaster', 'Electro Fangs', 'Revenge Deck'
     ],
 
 'petslist': ['L.A.S.S.I', 'Electro Owl', 'Mighty Yak', 'Unicorn', 'Frosty', 'Diggy',

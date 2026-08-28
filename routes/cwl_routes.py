@@ -58,6 +58,7 @@ def wartag(clan_tag, season, round_day):
     dumpdata = None
     if cwl_data:
         if 'rounds' in cwl_data and len(cwl_data['rounds']) > round_index:
+            war_tag_seq = []
             target_round_data = cwl_data['rounds'][round_index]
             for war_tag in target_round_data.get('warTags', []):
                 if war_tag == '#0':
@@ -79,6 +80,11 @@ def wartag(clan_tag, season, round_day):
                         total_member_list[member['tag']] = member
                     members_list.sort(key=lambda member_dict: int(member_dict['mapPosition']))
 
+                if target_round_data[war_tag].get('opponent').get('tag')[1:] == clan_tag:
+                    temp_opponent = copy.deepcopy(target_round_data[war_tag].get('opponent'))
+                    target_round_data[war_tag]['opponent'] = copy.deepcopy(target_round_data[war_tag].get('clan'))
+                    target_round_data[war_tag]['clan'] = copy.deepcopy(temp_opponent)
+
                 war_tag_data = cwl_data['rounds'][round_index][war_tag]
                 if (war_tag_data['clan']['stars'] > war_tag_data['opponent']['stars'] or
                     (war_tag_data['clan']['stars'] == war_tag_data['opponent']['stars'] and 
@@ -86,6 +92,15 @@ def wartag(clan_tag, season, round_day):
                     war_tag_data['result'] = 'win'
                 else:
                     war_tag_data['result'] = 'lost'
+
+                if target_round_data[war_tag].get('clan').get('tag')[1:] == clan_tag or \
+                   target_round_data[war_tag].get('opponent').get('tag')[1:] == clan_tag:
+                    war_tag_seq.insert(0, war_tag)
+                else:
+                    war_tag_seq.append(war_tag)
+            cwl_data['rounds'][round_index]['warTags'] = copy.deepcopy(war_tag_seq)
+            # cwl_data['rounds'][round_index]['war_tag_seq'] = copy.deepcopy(war_tag_seq)
+            
         dumpdata = json.dumps(cwl_data, indent=4).replace("\n", "<br>").replace(" ", "&nbsp;")   
     return render_template('wartag.html', ThisHTML='clanwarleague', ClanWar=cwl_data, RoundDay=round_index, 
                            totalMemberList=total_member_list, dumpdata=dumpdata,
